@@ -113,7 +113,7 @@ public class UserService {
         return hotelManagerRepo.save(hotelManager);
     }
 
-    public User registerNewClient (Client client){
+    public Client registerNewClient (Client client){
           Role role = roleRepo.findById("Client").get();
           Set<Role> userRoles = new HashSet<>();
           userRoles.add(role);

@@ -1,7 +1,11 @@
 package com.reservation.HotelManagement.Controller;
 
 import com.reservation.HotelManagement.Model.Client;
+import com.reservation.HotelManagement.Model.Reservation;
+import com.reservation.HotelManagement.Model.User;
 import com.reservation.HotelManagement.Repository.ClientRepo;
+import com.reservation.HotelManagement.Service.ClientService;
+import com.reservation.HotelManagement.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +21,16 @@ public class ClientController {
     @Autowired
     private ClientRepo clientRepo;
 
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private UserService userService;
+
     // Create or update a client
     @PostMapping
-    public ResponseEntity<Client> saveOrUpdateClient(@RequestBody Client client) {
-        Client savedClient = clientRepo.save(client);
-        return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
+    public Client registerNewClient(@RequestBody Client client){
+        return userService.registerNewClient(client);
     }
 
     // Retrieve all clients
@@ -37,6 +46,11 @@ public class ClientController {
         Optional<Client> client = clientRepo.findById(id);
         return client.map(c -> new ResponseEntity<>(c, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/{id}/reservation")
+    public List<Reservation> getReservationByClientId(@PathVariable("id") Long id){
+           return clientService.getReservationByClients(id);
     }
 
     // Update a client

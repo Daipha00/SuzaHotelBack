@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v3/")
+@RequestMapping
 public class JwtController {
 
     @Autowired

@@ -3,6 +3,7 @@ package com.reservation.HotelManagement.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -40,8 +41,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers( "/api/v3/registerNewFrontManager","/venue","/hotelManager","/registerNewClient"
-                       ,"/room","/api/v3/registerNewClient","/client","/reservation",
-                        "/room/{id}","/api/v3/authenticate","/api/v3/registerNewHotelManager")
+                       ,"/room","/api/v3/registerNewClient","/client","/reservation","/authenticate","/client/{id}/reservation",
+                        "/room/{id}","/api/v3/authenticate","/api/v3/registerNewHotelManager","/api/clients","/client/{clientId}")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()

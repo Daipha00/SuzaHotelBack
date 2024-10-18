@@ -46,10 +46,7 @@ public class UserController {
         return userService.registerNewFrontManager(frontOfficerManager);
     }
 
-    @PostMapping({"/registerNewClient"})
-    public User registerNewClient(@RequestBody Client client){
-        return userService.registerNewClient(client);
-    }
+
 
     @GetMapping({"/forAdmin"})
     @PreAuthorize("hasRole('Admin')")
