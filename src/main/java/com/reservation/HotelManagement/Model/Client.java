@@ -22,8 +22,8 @@ public class Client extends User{
     private List<Room> rooms;
 
     // One-to-Many relationship with Venue
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Venue> venues;
+//    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Venue> venues;
 
     // Many-to-Many relationship with Front Office Staff
     @ManyToMany(mappedBy = "client")

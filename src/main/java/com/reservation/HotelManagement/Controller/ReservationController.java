@@ -31,13 +31,6 @@ public class ReservationController {
         return reservationRepo.save(reservation);
     }
 
-    // Retrieve all reservations
-//    @GetMapping
-//    public ResponseEntity<List<Reservation>> getAllReservations() {
-//        List<Reservation> reservationList = reservationRepo.findAll();
-//        return new ResponseEntity<>(reservationList, HttpStatus.OK);
-//    }
-
     @GetMapping
     public List<Reservation> getReservationsWithClientDetails(){
         List<Reservation> reservations = reservationRepo.findAll();

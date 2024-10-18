@@ -8,6 +8,7 @@ import java.time.LocalTime;
 
 @Entity
 @Data
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Reservation {
 
     @Id
