@@ -20,8 +20,5 @@ public class Room{
     @Lob
     private byte[] image;
 
-    // Many-to-One relationship with Guest
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private Client client;
+
 }

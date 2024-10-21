@@ -1,8 +1,10 @@
 package com.reservation.HotelManagement.Controller;
 
 import com.reservation.HotelManagement.Model.Client;
+import com.reservation.HotelManagement.Model.Room;
 import com.reservation.HotelManagement.Model.Room_reservation;
 import com.reservation.HotelManagement.Repository.ClientRepo;
+import com.reservation.HotelManagement.Repository.RoomRepo;
 import com.reservation.HotelManagement.Repository.RoomReservationRepository;
 import com.reservation.HotelManagement.Service.RoomReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +23,27 @@ public class RoomReservationController {
     private ClientRepo clientRepo;
 
     @Autowired
+    private RoomRepo roomRepo;
+
+    @Autowired
     private RoomReservationRepository roomReservationRepository;
+
 
 
     @PostMapping
     @ResponseBody
-    public Room_reservation createNewRoomReservation(@RequestBody Room_reservation roomReservation, @RequestParam Long clientId) {
-        Client client = clientRepo.findById(clientId).orElseThrow(() -> new RuntimeException("Client not found"));
-        roomReservation.setClient(client); // Set the client for the reservation
-        return roomReservationRepository.save(roomReservation);
+    public Room_reservation createNewReservation(@RequestBody Room_reservation reservation,
+                                            @RequestParam Long clientId,
+                                            @RequestParam Long roomId) {
+        Client client = clientRepo.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+        Room room = roomRepo.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+
+        reservation.setClient(client); // Set the client for the reservation
+        reservation.setRoom(room); // Set the room for the reservation
+
+        return roomReservationRepository.save(reservation);
     }
 
 

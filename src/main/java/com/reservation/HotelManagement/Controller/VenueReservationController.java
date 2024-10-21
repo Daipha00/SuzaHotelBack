@@ -1,6 +1,12 @@
 package com.reservation.HotelManagement.Controller;
 
+import com.reservation.HotelManagement.Model.Client;
+import com.reservation.HotelManagement.Model.Room_reservation;
+import com.reservation.HotelManagement.Model.Venue;
 import com.reservation.HotelManagement.Model.Venue_reservation;
+import com.reservation.HotelManagement.Repository.ClientRepo;
+import com.reservation.HotelManagement.Repository.VenueRepo;
+import com.reservation.HotelManagement.Repository.VenueReservationRepository;
 import com.reservation.HotelManagement.Service.VenueReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,17 +15,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/venue-reservation")
+@RequestMapping("/venue_reservation")
 public class VenueReservationController {
 
     @Autowired
     private VenueReservationService venueReservationService;
 
+    @Autowired
+    private VenueRepo venueRepo;
+    @Autowired
+    private VenueReservationRepository venueReservationRepository;
+
+    @Autowired
+    private ClientRepo clientRepo;
+
     // Post a new venue reservation
     @PostMapping
-    public Venue_reservation createVenueReservation(@RequestBody Venue_reservation venueReservation) {
-        return venueReservationService.createVenueReservation(venueReservation);
+    @ResponseBody
+    public Venue_reservation createNewReservation(@RequestBody Venue_reservation reservation,
+                                            @RequestParam Long clientId,
+                                            @RequestParam Long venueId) {
+        Client client = clientRepo.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+        Venue venue = venueRepo.findById(venueId)
+                .orElseThrow(() -> new RuntimeException("Venue not found"));
+
+        reservation.setClient(client); // Set the client for the reservation
+        reservation.setVenue(venue); // Set the venue for the reservation
+
+        return venueReservationRepository.save(reservation);
     }
+
 
     // Get all venue reservations
     @GetMapping

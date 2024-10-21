@@ -18,7 +18,7 @@ public class RoomController {
     @Autowired
     private RoomRepo roomRepo;  // Assuming you have a TrialRepository
 
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<Room> createNewRoom(
             @RequestParam("roomType") String roomType,
             @RequestParam("pax") int pax,

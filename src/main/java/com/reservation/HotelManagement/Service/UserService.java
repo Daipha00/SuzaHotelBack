@@ -3,7 +3,6 @@ package com.reservation.HotelManagement.Service;
 import com.reservation.HotelManagement.Model.*;
 import com.reservation.HotelManagement.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +27,7 @@ public class UserService {
     @Autowired
     private HotelManagerRepo hotelManagerRepo;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
 
     public User createNewUser(User user){
         return userRepo.save(user);
@@ -80,7 +78,7 @@ public class UserService {
         User adminUser = new User();
         adminUser.setId(1L);
         adminUser.setUserName("haji");
-        adminUser.setUserPassword(getEncodedPassword("admin123"));
+        adminUser.setUserPassword("admin123");
         adminUser.setUserFirstName("Rahel");
         adminUser.setUserLastName("Ombeni");
         adminUser.setEmail("msagaladaines@gmail.com");
@@ -108,7 +106,7 @@ public class UserService {
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);
         hotelManager.setRole(userRoles);
-        hotelManager.setUserPassword(getEncodedPassword(hotelManager.getUserPassword()));
+        hotelManager.setUserPassword(hotelManager.getUserPassword());
 
         return hotelManagerRepo.save(hotelManager);
     }
@@ -118,7 +116,7 @@ public class UserService {
           Set<Role> userRoles = new HashSet<>();
           userRoles.add(role);
           client.setRole(userRoles);
-          client.setUserPassword(getEncodedPassword(client.getUserPassword()));
+          client.setUserPassword(client.getUserPassword());
 
           return clientRepo.save(client);
     }
@@ -128,13 +126,13 @@ public class UserService {
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);
         frontOfficerManager.setRole(userRoles);
-        frontOfficerManager.setUserPassword(getEncodedPassword(frontOfficerManager.getUserPassword()));
+        frontOfficerManager.setUserPassword(frontOfficerManager.getUserPassword());
 
         return frontManagerRepo.save(frontOfficerManager);
     }
 
 
-    public String getEncodedPassword (String password){
-        return passwordEncoder.encode(password);
-    }
+//    public String getEncodedPassword (String password){
+//        return passwordEncoder.encode(password);
+//    }
 }
