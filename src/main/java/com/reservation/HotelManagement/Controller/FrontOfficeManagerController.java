@@ -12,6 +12,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/frontManager")
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class FrontOfficeManagerController {
 
     @Autowired
