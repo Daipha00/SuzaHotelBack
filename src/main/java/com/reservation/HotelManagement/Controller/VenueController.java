@@ -11,15 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-@CrossOrigin(origins = "http://localhost:4200")
+
 
 @RestController
 @RequestMapping("/venue")
 @CrossOrigin(originPatterns = "*")
-<<<<<<< HEAD
-=======
 
->>>>>>> 719e2b29f33cb82fef555c70c0e19cb50e6b4773
 public class VenueController {
 
     @Autowired

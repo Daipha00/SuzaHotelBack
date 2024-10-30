@@ -13,14 +13,9 @@ import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:4200")
-<<<<<<< HEAD
 
 @CrossOrigin(originPatterns = "*")
-=======
-@CrossOrigin(origins = "http://localhost:4200")
->>>>>>> f5238d756382b9828e77f6e6438aa4d5e95ff8c1
-@RequestMapping("/api/v3/")
+
 public class UserController {
 
     @Autowired

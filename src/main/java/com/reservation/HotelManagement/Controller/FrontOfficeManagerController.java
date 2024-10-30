@@ -12,11 +12,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/frontManager")
-<<<<<<< HEAD
+
+
 @CrossOrigin(originPatterns = "*")
-=======
-@CrossOrigin(origins = "http://localhost:4200")
->>>>>>> f5238d756382b9828e77f6e6438aa4d5e95ff8c1
+
 
 public class FrontOfficeManagerController {
 
