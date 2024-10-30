@@ -13,6 +13,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/room")
+@CrossOrigin(originPatterns = "*")
+
 public class RoomController {
 
     @Autowired

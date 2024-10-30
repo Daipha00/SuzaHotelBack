@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(originPatterns = "*")
+
 @RequestMapping("/venue_reservation")
 public class VenueReservationController {
 

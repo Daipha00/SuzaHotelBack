@@ -14,6 +14,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/reservation")
+@CrossOrigin(originPatterns = "*")
+
 public class ReservationController {
 
     @Autowired
