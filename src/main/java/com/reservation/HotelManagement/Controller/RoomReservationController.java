@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/room_reservation")
+@CrossOrigin(originPatterns = "*")
 public class RoomReservationController {
 
     @Autowired
@@ -33,8 +34,8 @@ public class RoomReservationController {
     @PostMapping
     @ResponseBody
     public Room_reservation createNewReservation(@RequestBody Room_reservation reservation,
-                                            @RequestParam Long clientId,
-                                            @RequestParam Long roomId) {
+                                                 @RequestParam Long clientId,
+                                                 @RequestParam Long roomId) {
         Client client = clientRepo.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
         Room room = roomRepo.findById(roomId)

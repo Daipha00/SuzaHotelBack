@@ -19,6 +19,10 @@ public class ClientService {
         return clientRepo.getReservationByClient(id);
     }
 
+
+    public Client createClient(Client client) {
+        return clientRepo.save(client);
+    }
 //    public List<ReservationW> getAllReservationsWithClients() {
 //        List<Reservation> reservations = reservationRepo.findAll();
 //        List<ReservationWithClient> result = new ArrayList<>();

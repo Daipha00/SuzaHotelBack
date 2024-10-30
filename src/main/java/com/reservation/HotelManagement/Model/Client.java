@@ -9,8 +9,16 @@ import java.util.List;
 
 @Entity
 @Data
-public class Client extends User{
+public class Client {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String userFirstName;
+    private String userLastName;
+    private String address;
+    private String email;
+    private String phoneNumber;
             private String country;
             private String city;
             private int zipcode;
@@ -18,5 +26,7 @@ public class Client extends User{
     // Many-to-Many relationship with Front Office Staff
     @ManyToMany(mappedBy = "client")
     private List<FrontOfficeStaff> frontOfficeStaff;
+
+
 
 }

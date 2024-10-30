@@ -50,10 +50,6 @@ public class UserService {
         hotelManagerRole.setRoleDescription("Role for Hotel Manager only");
         roleRepo.save(hotelManagerRole);
 
-        Role clientRole = new Role();
-        clientRole.setRoleName("Client");
-        clientRole.setRoleDescription("Role for Client only");
-        roleRepo.save(clientRole);
 
         Role officerRole = new Role();
         officerRole.setRoleName("IT Officer");
@@ -77,8 +73,8 @@ public class UserService {
 
         User adminUser = new User();
         adminUser.setId(1L);
-        adminUser.setUserName("haji");
-        adminUser.setUserPassword("admin123");
+//        adminUser.setUserName("haji");
+//        adminUser.setUserPassword("admin123");
         adminUser.setUserFirstName("Rahel");
         adminUser.setUserLastName("Ombeni");
         adminUser.setEmail("msagaladaines@gmail.com");
@@ -91,15 +87,7 @@ public class UserService {
 
     }
 
-//    public User registerNewUser (User user){
-//        Role role = roleRepo.findById("User").get();
-//        Set<Role> userRoles = new HashSet<>();
-//        userRoles.add(role);
-//        user.setRole(userRoles);
-//        user.setUserPassword(getEncodedPassword(user.getUserPassword()));
-//
-//        return userRepo.save(user);
-//    }
+
 
     public User registerNewHotelManager (HotelManager hotelManager){
         Role role = roleRepo.findById("Hotel Manager").get();
@@ -111,15 +99,15 @@ public class UserService {
         return hotelManagerRepo.save(hotelManager);
     }
 
-    public Client registerNewClient (Client client){
-          Role role = roleRepo.findById("Client").get();
-          Set<Role> userRoles = new HashSet<>();
-          userRoles.add(role);
-          client.setRole(userRoles);
-          client.setUserPassword(client.getUserPassword());
-
-          return clientRepo.save(client);
-    }
+//    public Client registerNewClient (Client client){
+//          Role role = roleRepo.findById("Client").get();
+//          Set<Role> userRoles = new HashSet<>();
+//          userRoles.add(role);
+//          client.setRole(userRoles);
+//          client.setUserPassword(client.getUserPassword());
+//
+//          return clientRepo.save(client);
+//    }
 
     public User registerNewFrontManager(FrontOfficerManager frontOfficerManager){
         Role role = roleRepo.findById("Front Office Manager").get();

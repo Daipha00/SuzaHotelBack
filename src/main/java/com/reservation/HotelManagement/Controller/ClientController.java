@@ -1,9 +1,8 @@
 package com.reservation.HotelManagement.Controller;
 
-import com.reservation.HotelManagement.Model.Client;
-import com.reservation.HotelManagement.Model.Reservation;
-import com.reservation.HotelManagement.Model.User;
+import com.reservation.HotelManagement.Model.*;
 import com.reservation.HotelManagement.Repository.ClientRepo;
+import com.reservation.HotelManagement.Repository.UserRepo;
 import com.reservation.HotelManagement.Service.ClientService;
 import com.reservation.HotelManagement.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/client")
+@CrossOrigin(originPatterns = "*")
 public class ClientController {
 
     @Autowired
@@ -25,15 +25,36 @@ public class ClientController {
     private ClientService clientService;
 
     @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
     private UserService userService;
 
     // Create or update a client
     @PostMapping
-    public Client registerNewClient(@RequestBody Client client){
-        return userService.registerNewClient(client);
+    public ResponseEntity<Client> createClient(@RequestBody Client client) {
+        Client savedClient = clientService.createClient(client);
+        return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
     }
 
     // Retrieve all clients
+
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+//        User user = userRepo.findByUserName(loginRequest.getUserName());
+//
+//        if (user == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseMessage("Invalid username or password."));
+//        }
+//
+//        // Compare the provided password with the stored password
+//        if (!loginRequest.getUserPassword().equals(user.getUserPassword())) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseMessage("Invalid username or password."));
+//        }
+//
+//        // If login is successful, return a success message in JSON format
+//        return ResponseEntity.ok(new ResponseMessage("Login successful"));
+//    }
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
         List<Client> clients = clientRepo.findAll();

@@ -18,8 +18,9 @@ public class Reservation {
     private LocalDate check_in;
     private LocalDate check_out;
     private LocalTime arrival_time;
+    private int numberOfGuests;
     private String special_request;
-    private String status;
+//    private String status;
 
     @ManyToOne(fetch = FetchType.EAGER) // Keep this to establish the relationship
     @JoinColumn(name = "client_id")

@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/venue")
+@CrossOrigin(originPatterns = "*")
 public class VenueController {
 
     @Autowired
