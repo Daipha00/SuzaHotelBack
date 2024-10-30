@@ -15,7 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/room_reservation")
+<<<<<<< HEAD
 @CrossOrigin(originPatterns = "*")
+=======
+@CrossOrigin(origins = "http://localhost:4200")
+>>>>>>> f5238d756382b9828e77f6e6438aa4d5e95ff8c1
 
 public class RoomReservationController {
 
