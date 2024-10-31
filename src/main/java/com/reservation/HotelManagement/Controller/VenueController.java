@@ -28,7 +28,7 @@ public class VenueController {
             @RequestParam("capacity") int capacity,
             @RequestParam("location") String location,
             @RequestParam("price") Double price,
-            @RequestParam("availabilityStatus") String availabilityStatus,
+
             @RequestParam("venuePackage") String venuePackage,
             @RequestParam("description") String description,
             @RequestParam("image") MultipartFile imageFile) throws IOException {
@@ -39,7 +39,7 @@ public class VenueController {
         venue.setCapacity(capacity);
         venue.setLocation(location);
         venue.setPrice(price);
-        venue.setAvailabilityStatus(availabilityStatus);
+
         venue.setVenuePackage(venuePackage);
         venue.setDescription(description);
 
@@ -74,7 +74,7 @@ public class VenueController {
             @RequestParam("capacity") int capacity,
             @RequestParam("location") String location,
             @RequestParam("price") Double price,
-            @RequestParam("availabilityStatus") String availabilityStatus,
+
             @RequestParam("venuePackage") String venuePackage,
             @RequestParam("description") String description,
             @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
@@ -90,7 +90,7 @@ public class VenueController {
         existingVenue.setVenueType(venueType);
         existingVenue.setLocation(location);
         existingVenue.setPrice(price);
-        existingVenue.setAvailabilityStatus(availabilityStatus);
+
         existingVenue.setDescription(description);
         existingVenue.setVenuePackage(venuePackage);
         existingVenue.setCapacity(capacity);

@@ -26,7 +26,7 @@ public class RoomController {
             @RequestParam("roomType") String roomType,
             @RequestParam("pax") int pax,
             @RequestParam("price") Double price,
-            @RequestParam("availabilityStatus") String availabilityStatus,
+
             @RequestParam("description") String description,
             @RequestParam("image") MultipartFile imageFile) throws IOException {
 
@@ -35,7 +35,7 @@ public class RoomController {
         room.setRoomType(roomType);
         room.setPax(pax);
         room.setPrice(price);
-        room.setAvailabilityStatus(availabilityStatus);
+
         room.setDescription(description);
 
         // Set the image as a byte array
@@ -68,7 +68,7 @@ public class RoomController {
             @RequestParam("roomType") String roomType,
             @RequestParam("pax") int pax,
             @RequestParam("price") Double price,
-            @RequestParam("availabilityStatus") String availabilityStatus,
+
             @RequestParam("description") String description,
             @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
 
@@ -83,7 +83,7 @@ public class RoomController {
         existingRoom.setRoomType(roomType);
         existingRoom.setPax(pax);
         existingRoom.setPrice(price);
-        existingRoom.setAvailabilityStatus(availabilityStatus);
+
         existingRoom.setDescription(description);
 
         // If a new image is provided, update the image

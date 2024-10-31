@@ -14,7 +14,7 @@ public class Room{
     private String roomType;
     private int pax;
     private Double price;
-    private String availabilityStatus;
+
     private String description;
 
     @Lob

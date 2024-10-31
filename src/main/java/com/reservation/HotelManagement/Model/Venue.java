@@ -15,7 +15,7 @@ public class Venue {
     private int capacity;
     private String location;
     private double price;
-    private  String availabilityStatus;
+  
     private String venuePackage;
     private String description;
 
