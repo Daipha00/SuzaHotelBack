@@ -13,12 +13,14 @@ public class Room{
     private Long id;
     private String roomType;
     private int pax;
-    private Double price;
-
     private String description;
 
     @Lob
     private byte[] image;
+
+    @ManyToOne
+    @JoinColumn(name = "hotel_id", nullable = false) // Foreign key to Hotel
+    private Hotel hotel;
 
 
 }

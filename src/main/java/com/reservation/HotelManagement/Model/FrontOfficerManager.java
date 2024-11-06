@@ -14,8 +14,6 @@ public class FrontOfficerManager extends User{
     @JoinColumn(name = "hotel_manager_id")
     private HotelManager hotelManager;
 
-    // One-to-Many relationship with Reservation
-    @OneToMany(mappedBy = "frontOfficerManager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Reservation> reservations;
+
 
 }

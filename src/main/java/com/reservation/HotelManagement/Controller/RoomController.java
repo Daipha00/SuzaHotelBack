@@ -1,110 +1,59 @@
 package com.reservation.HotelManagement.Controller;
 
 import com.reservation.HotelManagement.Model.Room;
+import com.reservation.HotelManagement.Model.Hotel;
 import com.reservation.HotelManagement.Repository.RoomRepo;
+import com.reservation.HotelManagement.Repository.HotelRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/room")
-
-@CrossOrigin(originPatterns = "*")
-
+@CrossOrigin(origins = "*")
 public class RoomController {
 
     @Autowired
-    private RoomRepo roomRepo;  // Assuming you have a TrialRepository
+    private RoomRepo roomRepo;
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @Autowired
+    private HotelRepo hotelRepo;
+
+    @PostMapping(consumes = "multipart/form-data")
+    @ResponseBody
     public ResponseEntity<Room> createNewRoom(
             @RequestParam("roomType") String roomType,
             @RequestParam("pax") int pax,
-            @RequestParam("price") Double price,
-
             @RequestParam("description") String description,
-            @RequestParam("image") MultipartFile imageFile) throws IOException {
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("hotelId") Long hotelId) {
 
-        // Create a new Trial instance and set fields
-        Room room = new Room();
-        room.setRoomType(roomType);
-        room.setPax(pax);
-        room.setPrice(price);
+        // Fetch the Hotel entity using the hotelId from the URL parameter
+        Hotel hotel = hotelRepo.findById(hotelId)
+                .orElseThrow(() -> new RuntimeException("Hotel not found"));
 
-        room.setDescription(description);
+        try {
+            // Convert the image to byte array
+            byte[] imageBytes = image.getBytes();
 
-        // Set the image as a byte array
-        room.setImage(imageFile.getBytes());
+            // Create a new Room entity
+            Room room = new Room();
+            room.setRoomType(roomType);
+            room.setPax(pax);
+            room.setDescription(description);
+            room.setImage(imageBytes); // Set the image as a byte array
+            room.setHotel(hotel); // Set the hotel object directly
 
-        // Save the trial entity to the database
-        Room savedRoom = roomRepo.save(room);
+            // Save the room to the database
+            Room savedRoom = roomRepo.save(room);
 
-        // Return a response entity with the saved trial
-        return ResponseEntity.ok(savedRoom);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Room>> getAllRoom() {
-        List<Room> rooms = roomRepo.findAll();
-        return ResponseEntity.ok(rooms);
-    }
-
-    // GET method to retrieve a single trial by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
-        return roomRepo.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(
-            @PathVariable Long id,
-            @RequestParam("roomType") String roomType,
-            @RequestParam("pax") int pax,
-            @RequestParam("price") Double price,
-
-            @RequestParam("description") String description,
-            @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
-
-        // Find the trial by ID
-        Optional<Room> existingRoomOpt = roomRepo.findById(id);
-        if (!existingRoomOpt.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(savedRoom, HttpStatus.CREATED);
+        } catch (IOException e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        // Update the trial's data
-        Room existingRoom = existingRoomOpt.get();
-        existingRoom.setRoomType(roomType);
-        existingRoom.setPax(pax);
-        existingRoom.setPrice(price);
-
-        existingRoom.setDescription(description);
-
-        // If a new image is provided, update the image
-        if (imageFile != null && !imageFile.isEmpty()) {
-            existingRoom.setImage(imageFile.getBytes());
-        }
-
-        // Save the updated trial
-        Room updatedRoom = roomRepo.save(existingRoom);
-        return ResponseEntity.ok(updatedRoom);
-    }
-
-    // DELETE method to delete a trial by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTrial(@PathVariable Long id) {
-        Optional<Room> existingRoomOpt = roomRepo.findById(id);
-        if (!existingRoomOpt.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        roomRepo.deleteById(id);
-        return ResponseEntity.ok().build();
     }
 }

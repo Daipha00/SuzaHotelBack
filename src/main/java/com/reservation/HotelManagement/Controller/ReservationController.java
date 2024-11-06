@@ -43,13 +43,22 @@ public class ReservationController {
         return reservations;
     }
 
-    // Retrieve a reservation by ID
     @GetMapping("/{id}")
     public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
         Optional<Reservation> reservation = reservationRepo.findById(id);
-        return reservation.map(r -> new ResponseEntity<>(r, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (reservation.isPresent()) {
+            return ResponseEntity.ok(reservation.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+
+//    @GetMapping
+//    public ResponseEntity<List<Reservation>> getAllReservations() {
+//        List<Reservation> reservations = reservationRepo.findAll();
+//        return ResponseEntity.ok(reservations);
+//    }
 
 
 

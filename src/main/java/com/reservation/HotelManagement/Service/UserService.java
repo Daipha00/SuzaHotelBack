@@ -73,8 +73,8 @@ public class UserService {
 
         User adminUser = new User();
         adminUser.setId(1L);
-//        adminUser.setUserName("haji");
-//        adminUser.setUserPassword("admin123");
+        adminUser.setUserName("haji");
+        adminUser.setUserPassword("admin123");
         adminUser.setUserFirstName("Rahel");
         adminUser.setUserLastName("Ombeni");
         adminUser.setEmail("msagaladaines@gmail.com");
