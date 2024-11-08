@@ -21,13 +21,6 @@ public class UserService {
     @Autowired
     private ClientRepo clientRepo;
 
-    @Autowired
-    private FrontManagerRepo frontManagerRepo;
-
-    @Autowired
-    private HotelManagerRepo hotelManagerRepo;
-
-
 
     public User createNewUser(User user){
         return userRepo.save(user);
@@ -45,32 +38,6 @@ public class UserService {
 //        userRole.setRoleDescription("Role for user only");
 //        roleRepo.save(userRole);
 
-        Role hotelManagerRole = new Role();
-        hotelManagerRole.setRoleName("Hotel Manager");
-        hotelManagerRole.setRoleDescription("Role for Hotel Manager only");
-        roleRepo.save(hotelManagerRole);
-
-
-        Role officerRole = new Role();
-        officerRole.setRoleName("IT Officer");
-        officerRole.setRoleDescription("Role for IT officer only");
-        roleRepo.save(officerRole);
-
-        Role frontManager = new Role();
-        frontManager.setRoleName("Front office manager");
-        frontManager.setRoleDescription("Role for Front office manager only");
-        roleRepo.save(frontManager);
-
-        Role frontStaff = new Role();
-        frontStaff.setRoleName("Front office staff");
-        frontStaff.setRoleDescription("Role for Front office staff only");
-        roleRepo.save(frontStaff);
-
-        Role client = new Role();
-        client.setRoleName("Front office manager");
-        client.setRoleDescription("Role for Front Office Manager only");
-        roleRepo.save(client);
-
         User adminUser = new User();
         adminUser.setId(1L);
         adminUser.setUserName("haji");
@@ -85,38 +52,6 @@ public class UserService {
         adminUser.setRole(adminRoles);
         userRepo.save(adminUser);
 
-    }
-
-
-
-    public User registerNewHotelManager (HotelManager hotelManager){
-        Role role = roleRepo.findById("Hotel Manager").get();
-        Set<Role> userRoles = new HashSet<>();
-        userRoles.add(role);
-        hotelManager.setRole(userRoles);
-        hotelManager.setUserPassword(hotelManager.getUserPassword());
-
-        return hotelManagerRepo.save(hotelManager);
-    }
-
-//    public Client registerNewClient (Client client){
-//          Role role = roleRepo.findById("Client").get();
-//          Set<Role> userRoles = new HashSet<>();
-//          userRoles.add(role);
-//          client.setRole(userRoles);
-//          client.setUserPassword(client.getUserPassword());
-//
-//          return clientRepo.save(client);
-//    }
-
-    public User registerNewFrontManager(FrontOfficerManager frontOfficerManager){
-        Role role = roleRepo.findById("Front Office Manager").get();
-        Set<Role> userRoles = new HashSet<>();
-        userRoles.add(role);
-        frontOfficerManager.setRole(userRoles);
-        frontOfficerManager.setUserPassword(frontOfficerManager.getUserPassword());
-
-        return frontManagerRepo.save(frontOfficerManager);
     }
 
 

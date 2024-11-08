@@ -15,6 +15,8 @@ public interface ClientRepo extends JpaRepository<Client, Long> {
     @Query("SELECT r FROM Reservation r WHERE r.client.id = ?1")
     List<Reservation> getReservationByClient(Long id);
 
+    Optional<Client> findByEmail(String email);
+
 
 //    List<Client> findByUserName(Client client);
 

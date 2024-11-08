@@ -1,8 +1,5 @@
 package com.reservation.HotelManagement.Controller;
 
-import com.reservation.HotelManagement.Model.Client;
-import com.reservation.HotelManagement.Model.FrontOfficerManager;
-import com.reservation.HotelManagement.Model.HotelManager;
 import com.reservation.HotelManagement.Model.User;
 import com.reservation.HotelManagement.Repository.UserRepo;
 import com.reservation.HotelManagement.Service.UserService;
@@ -35,15 +32,15 @@ public class UserController {
 //        return userService.registerNewUser(user);
 //    }
 
-    @PostMapping({"/registerNewHotelManager"})
-    public User registerNewHotelManager(@RequestBody HotelManager hotelManager){
-        return userService.registerNewHotelManager(hotelManager);
-    }
-
-    @PostMapping({"/registerNewFrontManager"})
-    public User registerNewFrontManager(@RequestBody FrontOfficerManager frontOfficerManager){
-        return userService.registerNewFrontManager(frontOfficerManager);
-    }
+//    @PostMapping({"/registerNewHotelManager"})
+//    public User registerNewHotelManager(@RequestBody HotelManager hotelManager){
+//        return userService.registerNewHotelManager(hotelManager);
+//    }
+//
+//    @PostMapping({"/registerNewFrontManager"})
+//    public User registerNewFrontManager(@RequestBody FrontOfficerManager frontOfficerManager){
+//        return userService.registerNewFrontManager(frontOfficerManager);
+//    }
 
 
 

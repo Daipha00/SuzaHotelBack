@@ -12,18 +12,13 @@ public class Venue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String venueType;
+    private String venueName;
     private int capacity;
     private String location;
-    private double price;
-
     private String venuePackage;
     private String description;
 
     @Lob
     private byte[] image;
 
-    // Many-to-One relationship with Guest
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "client_id")
-//    private Client client;
 }

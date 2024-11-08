@@ -25,10 +25,9 @@ public class VenueController {
     @PostMapping
     public ResponseEntity<Venue> createVenue(
             @RequestParam("venueType") String venueType,
+            @RequestParam("venueName") String venueName,
             @RequestParam("capacity") int capacity,
             @RequestParam("location") String location,
-            @RequestParam("price") Double price,
-
             @RequestParam("venuePackage") String venuePackage,
             @RequestParam("description") String description,
             @RequestParam("image") MultipartFile imageFile) throws IOException {
@@ -36,10 +35,9 @@ public class VenueController {
         // Create a new Trial instance and set fields
         Venue venue = new Venue();
         venue.setVenueType(venueType);
+        venue.setVenueName(venueName);
         venue.setCapacity(capacity);
         venue.setLocation(location);
-        venue.setPrice(price);
-
         venue.setVenuePackage(venuePackage);
         venue.setDescription(description);
 
@@ -71,10 +69,9 @@ public class VenueController {
     public ResponseEntity<Venue> updatedVenue(
             @PathVariable Long id,
             @RequestParam("venueType") String venueType,
+            @RequestParam("venueName") String venueName,
             @RequestParam("capacity") int capacity,
             @RequestParam("location") String location,
-            @RequestParam("price") Double price,
-
             @RequestParam("venuePackage") String venuePackage,
             @RequestParam("description") String description,
             @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
@@ -88,9 +85,8 @@ public class VenueController {
         // Update the trial's data
         Venue existingVenue = existingVenueOpt.get();
         existingVenue.setVenueType(venueType);
+        existingVenue.setVenueName(venueName);
         existingVenue.setLocation(location);
-        existingVenue.setPrice(price);
-
         existingVenue.setDescription(description);
         existingVenue.setVenuePackage(venuePackage);
         existingVenue.setCapacity(capacity);

@@ -4,7 +4,9 @@ import com.reservation.HotelManagement.Model.Client;
 import com.reservation.HotelManagement.Model.Reservation;
 import com.reservation.HotelManagement.Repository.ClientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,22 +21,12 @@ public class ClientService {
         return clientRepo.getReservationByClient(id);
     }
 
-
     public Client createClient(Client client) {
         return clientRepo.save(client);
     }
-//    public List<ReservationW> getAllReservationsWithClients() {
-//        List<Reservation> reservations = reservationRepo.findAll();
-//        List<ReservationWithClient> result = new ArrayList<>();
-//
-//        for (Reservation reservation : reservations) {
-//            Client client = clientRepo.findById(reservation.getClient().getId()).orElseThrow();
-//            ReservationWithClient reservationWithClient = new ReservationWithClient();
-//            reservationWithClient.setReservation(reservation);
-//            reservationWithClient.setClient(client);
-//            result.add(reservationWithClient);
-//        }
-//
-//        return result;
-//    }
+
+    public boolean emailExists(String email) {
+        return clientRepo.findByEmail(email) != null;
+    }
+
 }

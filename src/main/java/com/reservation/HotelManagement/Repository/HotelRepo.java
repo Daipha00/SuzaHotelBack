@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface HotelRepo extends JpaRepository<Hotel, Long> {
 
-    @Query("SELECT h FROM Hotel h LEFT JOIN FETCH h.images WHERE h.id = :id")
-    Optional<Hotel> findByIdWithImages(Long id);
+//    @Query("SELECT h FROM Hotel h LEFT JOIN FETCH h.images WHERE h.id = :id")
+//    Optional<Hotel> findByIdWithImages(Long id);
 }
