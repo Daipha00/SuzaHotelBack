@@ -14,8 +14,7 @@ public class Venue {
     private Long id;
     private String venueName;
     private String venueType;
-    private String venueName;
-    private int capacity;
+      private int capacity;
     private String location;
     private String venuePackage;
     private String description;
@@ -23,9 +22,6 @@ public class Venue {
     @Lob
     private byte[] image;
 
-<<<<<<< HEAD
-}
-=======
     // Method to get the image as a Base64 string
     public String getImageAsBase64() {
         return image != null ? Base64.getEncoder().encodeToString(image) : null;
@@ -39,4 +35,3 @@ public class Venue {
 //    @JoinColumn(name = "client_id")
 //    private Client client;
 //}
->>>>>>> 522a5a2208e7ac201caa07e6b8742c86b4953258

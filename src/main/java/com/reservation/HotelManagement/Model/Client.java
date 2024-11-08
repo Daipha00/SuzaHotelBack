@@ -16,14 +16,9 @@ public class Client {
     private Long id;
     private String userFirstName;
     private String userLastName;
-<<<<<<< HEAD
-    private String password;
-    private String address;
-=======
     private String age;
     private String password;
     private String gender;
->>>>>>> 522a5a2208e7ac201caa07e6b8742c86b4953258
     private String email;
     private String country;
     private String city;
@@ -31,9 +26,4 @@ public class Client {
     private int zipcode;
     private String passport;
     private String phoneNumber;
-
-
-
-
-
 }
