@@ -28,6 +28,10 @@ public class VenueController {
             @RequestParam("venueName") String venueName,
             @RequestParam("capacity") int capacity,
             @RequestParam("location") String location,
+<<<<<<< HEAD
+=======
+            @RequestParam("venueName") String venueName,
+>>>>>>> 522a5a2208e7ac201caa07e6b8742c86b4953258
             @RequestParam("venuePackage") String venuePackage,
             @RequestParam("description") String description,
             @RequestParam("image") MultipartFile imageFile) throws IOException {
@@ -38,6 +42,10 @@ public class VenueController {
         venue.setVenueName(venueName);
         venue.setCapacity(capacity);
         venue.setLocation(location);
+<<<<<<< HEAD
+=======
+        venue.setVenueName(venueName);
+>>>>>>> 522a5a2208e7ac201caa07e6b8742c86b4953258
         venue.setVenuePackage(venuePackage);
         venue.setDescription(description);
 
@@ -54,6 +62,12 @@ public class VenueController {
     @GetMapping
     public ResponseEntity<List<Venue>> getAllVenue() {
         List<Venue> venues = venueRepo.findAll();
+        // Convert byte array images to Base64 strings
+        venues.forEach(venue -> {
+            if (venue.getImage() != null) {
+                venue.setImageAsBase64(venue.getImageAsBase64());
+            }
+        });
         return ResponseEntity.ok(venues);
     }
 
@@ -72,6 +86,10 @@ public class VenueController {
             @RequestParam("venueName") String venueName,
             @RequestParam("capacity") int capacity,
             @RequestParam("location") String location,
+<<<<<<< HEAD
+=======
+            @RequestParam("venueName") String venueName,
+>>>>>>> 522a5a2208e7ac201caa07e6b8742c86b4953258
             @RequestParam("venuePackage") String venuePackage,
             @RequestParam("description") String description,
             @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
@@ -87,6 +105,10 @@ public class VenueController {
         existingVenue.setVenueType(venueType);
         existingVenue.setVenueName(venueName);
         existingVenue.setLocation(location);
+<<<<<<< HEAD
+=======
+        existingVenue.setVenueName(venueName);
+>>>>>>> 522a5a2208e7ac201caa07e6b8742c86b4953258
         existingVenue.setDescription(description);
         existingVenue.setVenuePackage(venuePackage);
         existingVenue.setCapacity(capacity);
