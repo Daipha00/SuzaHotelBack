@@ -16,12 +16,20 @@ public class Client {
     private Long id;
     private String userFirstName;
     private String userLastName;
-    private String address;
+    private String age;
+    private String password;
+    private String gender;
     private String email;
+    private String country;
+    private String city;
+    private String address;
+    private int zipcode;
+    private String passport;
     private String phoneNumber;
-            private String country;
-            private String city;
-            private int zipcode;
+
+
+
+
 
     // Many-to-Many relationship with Front Office Staff
     @ManyToMany(mappedBy = "client")

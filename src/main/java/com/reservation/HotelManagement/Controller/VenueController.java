@@ -27,8 +27,7 @@ public class VenueController {
             @RequestParam("venueType") String venueType,
             @RequestParam("capacity") int capacity,
             @RequestParam("location") String location,
-            @RequestParam("price") Double price,
-
+            @RequestParam("venueName") String venueName,
             @RequestParam("venuePackage") String venuePackage,
             @RequestParam("description") String description,
             @RequestParam("image") MultipartFile imageFile) throws IOException {
@@ -38,8 +37,7 @@ public class VenueController {
         venue.setVenueType(venueType);
         venue.setCapacity(capacity);
         venue.setLocation(location);
-        venue.setPrice(price);
-
+        venue.setVenueName(venueName);
         venue.setVenuePackage(venuePackage);
         venue.setDescription(description);
 
@@ -56,6 +54,12 @@ public class VenueController {
     @GetMapping
     public ResponseEntity<List<Venue>> getAllVenue() {
         List<Venue> venues = venueRepo.findAll();
+        // Convert byte array images to Base64 strings
+        venues.forEach(venue -> {
+            if (venue.getImage() != null) {
+                venue.setImageAsBase64(venue.getImageAsBase64());
+            }
+        });
         return ResponseEntity.ok(venues);
     }
 
@@ -73,8 +77,7 @@ public class VenueController {
             @RequestParam("venueType") String venueType,
             @RequestParam("capacity") int capacity,
             @RequestParam("location") String location,
-            @RequestParam("price") Double price,
-
+            @RequestParam("venueName") String venueName,
             @RequestParam("venuePackage") String venuePackage,
             @RequestParam("description") String description,
             @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
@@ -89,8 +92,7 @@ public class VenueController {
         Venue existingVenue = existingVenueOpt.get();
         existingVenue.setVenueType(venueType);
         existingVenue.setLocation(location);
-        existingVenue.setPrice(price);
-
+        existingVenue.setVenueName(venueName);
         existingVenue.setDescription(description);
         existingVenue.setVenuePackage(venuePackage);
         existingVenue.setCapacity(capacity);
