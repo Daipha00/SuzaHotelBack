@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -32,16 +34,33 @@ public class ClientController {
     @Autowired
     private UserService userService;
 
+//    @PostMapping
+//    public ResponseEntity<?> createClient(@RequestBody Client client) {
+//        if (clientService.emailExists(client.getEmail())) {
+//            return new ResponseEntity<>("Email already exists!", HttpStatus.CONFLICT);
+//        }
+//        Client savedClient = clientService.createClient(client);
+//        return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
+//    }
+
+    // Endpoint to check if the email exists
+
+
+    // Endpoint to register a new client
     @PostMapping
-    public ResponseEntity<?> createClient(@RequestBody Client client) {
-        if (clientService.emailExists(client.getEmail())) {
-            return new ResponseEntity<>("Email already exists!", HttpStatus.CONFLICT);
+    public ResponseEntity<String> registerClient(@RequestBody Client client) {
+        // Check if the email already exists
+        if (clientRepo.findByEmail(client.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email already exists.");
         }
-        Client savedClient = clientService.createClient(client);
-        return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
+
+        // Save the new client
+        clientRepo.save(client);
+        return ResponseEntity.ok("Registration successful!");
     }
 
 
+<<<<<<< HEAD
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
@@ -53,6 +72,45 @@ public class ClientController {
     }
 
     // Retrieve all clients
+=======
+    @PostMapping("/client/login/{email}")
+    public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
+        try {
+            Optional<Client> clientOptional = clientRepo.findByEmail(email);
+            if (clientOptional.isPresent()) {
+                Client client = clientOptional.get();
+                // Directly compare the plaintext password with the one in the database
+                if (password.equals(client.getPassword())) {
+                    return new ResponseEntity<>(client, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Incorrect Credentials", HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception exception) {
+            return new ResponseEntity<>("No connection", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Map<String, Boolean>> getClientByEmail(@PathVariable String email) {
+        Map<String, Boolean> response = new HashMap<>();
+        try {
+            boolean emailExists = clientRepo.findByEmail(email).isPresent();
+            response.put("exists", emailExists);
+            return new ResponseEntity<>(response, emailExists ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        } catch (Exception exception) {
+            response.put("exists", false);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
+
+>>>>>>> 9d5f2fa5fb1d137bdbde7b14b99a059da56b8a00
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
         List<Client> clients = clientRepo.findAll();
