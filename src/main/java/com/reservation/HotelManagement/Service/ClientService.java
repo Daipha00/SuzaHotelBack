@@ -26,7 +26,14 @@ public class ClientService {
     }
 
     public boolean emailExists(String email) {
-        return clientRepo.findByEmail(email) != null;
+        System.out.println("Checking if email exists: " + email); // Debugging line
+        return clientRepo.findByEmail(email).isPresent();
+    }
+
+
+    public boolean login(String email, String password) {
+        Client client = clientRepo.findByEmail(email).orElse(null);
+        return client != null && client.getPassword().equals(password);
     }
 
 }

@@ -41,24 +41,18 @@ public class ClientController {
         return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
     }
 
-    // Retrieve all clients
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        User user = userRepo.findByUserName(loginRequest.getUserName());
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseMessage("Invalid username or password."));
+        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (isAuthenticated) {
+            return new ResponseEntity<>("Login successful!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
         }
-
-        // Compare the provided password with the stored password
-        if (!loginRequest.getUserPassword().equals(user.getUserPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseMessage("Invalid username or password."));
-        }
-
-        // If login is successful, return a success message in JSON format
-        return ResponseEntity.ok(new ResponseMessage("Login successful"));
     }
+
+    // Retrieve all clients
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
         List<Client> clients = clientRepo.findAll();
