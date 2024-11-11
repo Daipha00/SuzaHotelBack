@@ -38,7 +38,10 @@ public class VenueController {
         venue.setVenueName(venueName);
         venue.setCapacity(capacity);
         venue.setLocation(location);
+<<<<<<< HEAD
+=======
         venue.setVenueName(venueName);
+>>>>>>> 2c410c431e888ce6086c1e21e199fdb979c01d3d
         venue.setVenuePackage(venuePackage);
         venue.setDescription(description);
 
@@ -94,7 +97,10 @@ public class VenueController {
         existingVenue.setVenueType(venueType);
         existingVenue.setVenueName(venueName);
         existingVenue.setLocation(location);
+<<<<<<< HEAD
+=======
         existingVenue.setVenueName(venueName);
+>>>>>>> 2c410c431e888ce6086c1e21e199fdb979c01d3d
         existingVenue.setDescription(description);
         existingVenue.setVenuePackage(venuePackage);
         existingVenue.setCapacity(capacity);

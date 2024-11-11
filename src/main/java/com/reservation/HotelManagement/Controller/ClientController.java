@@ -47,6 +47,7 @@ public class ClientController {
     }
 
 
+<<<<<<< HEAD
 //    @PostMapping("/login")
 //    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 //        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
@@ -57,6 +58,10 @@ public class ClientController {
 //        }
 //    }
 
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 9e2bb507ae82b2814f01203dd98d169b37aae75e
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Client client = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
@@ -72,6 +77,45 @@ public class ClientController {
     }
 
     // Retrieve all clients
+<<<<<<< HEAD
+=======
+>>>>>>> 2c410c431e888ce6086c1e21e199fdb979c01d3d
+    @PostMapping("/client/login/{email}")
+    public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
+        try {
+            Optional<Client> clientOptional = clientRepo.findByEmail(email);
+            if (clientOptional.isPresent()) {
+                Client client = clientOptional.get();
+                // Directly compare the plaintext password with the one in the database
+                if (password.equals(client.getPassword())) {
+                    return new ResponseEntity<>(client, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Incorrect Credentials", HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception exception) {
+            return new ResponseEntity<>("No connection", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Map<String, Boolean>> getClientByEmail(@PathVariable String email) {
+        Map<String, Boolean> response = new HashMap<>();
+        try {
+            boolean emailExists = clientRepo.findByEmail(email).isPresent();
+            response.put("exists", emailExists);
+            return new ResponseEntity<>(response, emailExists ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        } catch (Exception exception) {
+            response.put("exists", false);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+>>>>>>> 9e2bb507ae82b2814f01203dd98d169b37aae75e
 
 
     @GetMapping
