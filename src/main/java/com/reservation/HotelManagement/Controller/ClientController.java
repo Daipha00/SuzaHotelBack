@@ -34,19 +34,6 @@ public class ClientController {
     @Autowired
     private UserService userService;
 
-//    @PostMapping
-//    public ResponseEntity<?> createClient(@RequestBody Client client) {
-//        if (clientService.emailExists(client.getEmail())) {
-//            return new ResponseEntity<>("Email already exists!", HttpStatus.CONFLICT);
-//        }
-//        Client savedClient = clientService.createClient(client);
-//        return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
-//    }
-
-    // Endpoint to check if the email exists
-
-
-    // Endpoint to register a new client
     @PostMapping
     public ResponseEntity<String> registerClient(@RequestBody Client client) {
         // Check if the email already exists
@@ -60,17 +47,45 @@ public class ClientController {
     }
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+//        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
+//        if (isAuthenticated) {
+//            return new ResponseEntity<>("Login successful!", HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
+//        }
+//    }
+
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 9e2bb507ae82b2814f01203dd98d169b37aae75e
+>>>>>>> e4a53e71c949ea7f7f95c31b9430769d9a6be738
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        if (isAuthenticated) {
-            return new ResponseEntity<>("Login successful!", HttpStatus.OK);
+        Client client = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (client != null) {
+            // Create a response object without the password
+            LoginResponse response = new LoginResponse(client.getEmail(), client.getUserFirstName(), client.getUserLastName(),
+                    client.getAddress(), client.getPassword(), client.getGender(),client.getAge(),client.getCity(),
+                    client.getPhoneNumber(),client.getZipcode(),client.getPassport(),client.getCountry());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
         }
     }
 
     // Retrieve all clients
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 2c410c431e888ce6086c1e21e199fdb979c01d3d
+>>>>>>> e4a53e71c949ea7f7f95c31b9430769d9a6be738
     @PostMapping("/client/login/{email}")
     public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
         try {
@@ -106,6 +121,7 @@ public class ClientController {
     }
 
 
+>>>>>>> 9e2bb507ae82b2814f01203dd98d169b37aae75e
 
 
     @GetMapping
