@@ -60,6 +60,20 @@ public class ClientController {
     }
 
 
+<<<<<<< HEAD
+=======
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (isAuthenticated) {
+            return new ResponseEntity<>("Login successful!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    // Retrieve all clients
+>>>>>>> 2c410c431e888ce6086c1e21e199fdb979c01d3d
     @PostMapping("/client/login/{email}")
     public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
         try {
