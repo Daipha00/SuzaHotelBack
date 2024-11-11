@@ -46,21 +46,94 @@ public class ClientController {
         return ResponseEntity.ok("Registration successful!");
     }
 
+<<<<<<< HEAD
+=======
+
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+//        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
+//        if (isAuthenticated) {
+//            return new ResponseEntity<>("Login successful!", HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
+//        }
+//    }
+
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 9e2bb507ae82b2814f01203dd98d169b37aae75e
+>>>>>>> e4a53e71c949ea7f7f95c31b9430769d9a6be738
+>>>>>>> 0dd4ba557073d11422d0f496182cd92c7ffff7b3
+>>>>>>> 2d6029e8b1b97a4d6c4225aa1f8ab6ebe23baff9
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Client client = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
         if (client != null) {
             // Create a response object without the password
-            LoginResponse response = new LoginResponse(client.getEmail(), client.getUserFirstName(), client.getUserLastName(),
-                    client.getAddress(), client.getPassword(), client.getGender(),client.getAge(),client.getCity(),
-                    client.getPhoneNumber(),client.getZipcode(),client.getPassport(),client.getCountry());
+            LoginResponse response = new LoginResponse(client);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
         }
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    // Retrieve all clients
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 2c410c431e888ce6086c1e21e199fdb979c01d3d
+>>>>>>> e4a53e71c949ea7f7f95c31b9430769d9a6be738
+    @PostMapping("/client/login/{email}")
+    public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
+        try {
+            Optional<Client> clientOptional = clientRepo.findByEmail(email);
+            if (clientOptional.isPresent()) {
+                Client client = clientOptional.get();
+                // Directly compare the plaintext password with the one in the database
+                if (password.equals(client.getPassword())) {
+                    return new ResponseEntity<>(client, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Incorrect Credentials", HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception exception) {
+            return new ResponseEntity<>("No connection", HttpStatus.BAD_REQUEST);
+        }
+    }
 
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Map<String, Boolean>> getClientByEmail(@PathVariable String email) {
+        Map<String, Boolean> response = new HashMap<>();
+        try {
+            boolean emailExists = clientRepo.findByEmail(email).isPresent();
+            response.put("exists", emailExists);
+            return new ResponseEntity<>(response, emailExists ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        } catch (Exception exception) {
+            response.put("exists", false);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+>>>>>>> 9e2bb507ae82b2814f01203dd98d169b37aae75e
+
+>>>>>>> 2d6029e8b1b97a4d6c4225aa1f8ab6ebe23baff9
+
+>>>>>>> 0dd4ba557073d11422d0f496182cd92c7ffff7b3
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
         List<Client> clients = clientRepo.findAll();
