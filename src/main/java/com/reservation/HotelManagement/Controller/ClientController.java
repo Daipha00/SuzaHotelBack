@@ -60,19 +60,6 @@ public class ClientController {
     }
 
 
-<<<<<<< HEAD
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        if (isAuthenticated) {
-            return new ResponseEntity<>("Login successful!", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-    // Retrieve all clients
-=======
     @PostMapping("/client/login/{email}")
     public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
         try {
@@ -110,7 +97,6 @@ public class ClientController {
 
 
 
->>>>>>> 9d5f2fa5fb1d137bdbde7b14b99a059da56b8a00
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
         List<Client> clients = clientRepo.findAll();
