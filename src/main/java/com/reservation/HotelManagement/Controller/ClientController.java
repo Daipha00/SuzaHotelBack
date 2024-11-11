@@ -60,7 +60,7 @@ public class ClientController {
     }
 
 
-    @GetMapping("/client/login/{email}")
+    @PostMapping("/client/login/{email}")
     public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
         try {
             Optional<Client> clientOptional = clientRepo.findByEmail(email);
