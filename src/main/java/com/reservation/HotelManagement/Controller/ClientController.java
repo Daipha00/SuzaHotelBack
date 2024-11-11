@@ -34,19 +34,6 @@ public class ClientController {
     @Autowired
     private UserService userService;
 
-//    @PostMapping
-//    public ResponseEntity<?> createClient(@RequestBody Client client) {
-//        if (clientService.emailExists(client.getEmail())) {
-//            return new ResponseEntity<>("Email already exists!", HttpStatus.CONFLICT);
-//        }
-//        Client savedClient = clientService.createClient(client);
-//        return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
-//    }
-
-    // Endpoint to check if the email exists
-
-
-    // Endpoint to register a new client
     @PostMapping
     public ResponseEntity<String> registerClient(@RequestBody Client client) {
         // Check if the email already exists
@@ -60,52 +47,31 @@ public class ClientController {
     }
 
 
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+//        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
+//        if (isAuthenticated) {
+//            return new ResponseEntity<>("Login successful!", HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
+//        }
+//    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        if (isAuthenticated) {
-            return new ResponseEntity<>("Login successful!", HttpStatus.OK);
+        Client client = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (client != null) {
+            // Create a response object without the password
+            LoginResponse response = new LoginResponse(client.getEmail(), client.getUserFirstName(), client.getUserLastName(),
+                    client.getAddress(), client.getPassword(), client.getGender(),client.getAge(),client.getCity(),
+                    client.getPhoneNumber(),client.getZipcode(),client.getPassport(),client.getCountry());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
         }
     }
 
     // Retrieve all clients
-    @PostMapping("/client/login/{email}")
-    public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
-        try {
-            Optional<Client> clientOptional = clientRepo.findByEmail(email);
-            if (clientOptional.isPresent()) {
-                Client client = clientOptional.get();
-                // Directly compare the plaintext password with the one in the database
-                if (password.equals(client.getPassword())) {
-                    return new ResponseEntity<>(client, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>("Incorrect Credentials", HttpStatus.UNAUTHORIZED);
-                }
-            } else {
-                return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception exception) {
-            return new ResponseEntity<>("No connection", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Map<String, Boolean>> getClientByEmail(@PathVariable String email) {
-        Map<String, Boolean> response = new HashMap<>();
-        try {
-            boolean emailExists = clientRepo.findByEmail(email).isPresent();
-            response.put("exists", emailExists);
-            return new ResponseEntity<>(response, emailExists ? HttpStatus.OK : HttpStatus.NOT_FOUND);
-        } catch (Exception exception) {
-            response.put("exists", false);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-
 
 
     @GetMapping
