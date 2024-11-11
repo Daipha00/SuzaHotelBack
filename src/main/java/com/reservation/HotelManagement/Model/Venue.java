@@ -14,11 +14,7 @@ public class Venue {
     private Long id;
     private String venueName;
     private String venueType;
-<<<<<<< HEAD
       private int capacity;
-=======
-    private int capacity;
->>>>>>> 2c410c431e888ce6086c1e21e199fdb979c01d3d
     private String location;
     private String venuePackage;
     private String description;
@@ -26,10 +22,7 @@ public class Venue {
     @Lob
     private byte[] image;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 2c410c431e888ce6086c1e21e199fdb979c01d3d
     // Method to get the image as a Base64 string
     public String getImageAsBase64() {
         return image != null ? Base64.getEncoder().encodeToString(image) : null;
