@@ -73,4 +73,16 @@ public class VenueReservationController {
     public ResponseEntity<Venue_reservation> updateVenueReservation(@PathVariable Long id, @RequestBody Venue_reservation updatedVenueReservation) {
         return venueReservationService.updateVenueReservation(id, updatedVenueReservation);
     }
+
+    @PatchMapping("{id}/status")
+    public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
+        Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
+        if (venueReservation.getStatus().equals("Pending")) {
+            venueReservation.setStatus("Accepted");
+        } else {
+            venueReservation.setStatus("Cancel");
+        }
+        venueReservationRepository.save(venueReservation);
+        return ResponseEntity.ok(venueReservation);
+    }
 }

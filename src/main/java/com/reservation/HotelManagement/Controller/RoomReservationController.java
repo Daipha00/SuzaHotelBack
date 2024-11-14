@@ -1,6 +1,7 @@
 package com.reservation.HotelManagement.Controller;
 
 import com.reservation.HotelManagement.Model.Client;
+//import com.reservation.HotelManagement.Model.ReservationStatus;
 import com.reservation.HotelManagement.Model.Room;
 import com.reservation.HotelManagement.Model.Room_reservation;
 import com.reservation.HotelManagement.Repository.ClientRepo;
@@ -73,5 +74,33 @@ public class RoomReservationController {
     public ResponseEntity<Room_reservation> updateRoomReservation(@PathVariable Long id, @RequestBody Room_reservation updatedRoomReservation) {
         return roomReservationService.updateRoomReservation(id, updatedRoomReservation);
     }
+
+//    @PutMapping("/{id}/approve")
+//    public ResponseEntity<Room_reservation> approveReservation(@PathVariable Long id) {
+//        Room_reservation reservation = roomReservationRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+//
+//        if (reservation.getStatus() == ReservationStatus.PENDING) {
+//            reservation.setStatus(ReservationStatus.APPROVED);
+//            roomReservationRepository.save(reservation);
+//            return ResponseEntity.ok(reservation);
+//        } else {
+//            return ResponseEntity.badRequest().body(reservation); // or handle differently
+//        }
+//    }
+
+//    @DeleteMapping("/{id}/cancel")
+//    public ResponseEntity<Room_reservation> cancelReservation(@PathVariable Long id) {
+//        Room_reservation reservation = roomReservationRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+//
+//        if (reservation.getStatus() == ReservationStatus.PENDING) {
+//            reservation.setStatus(ReservationStatus.CANCELLED);
+//            roomReservationRepository.save(reservation);
+//            return ResponseEntity.ok(reservation);
+//        } else {
+//            return ResponseEntity.badRequest().body(reservation); // or handle differently
+//        }
+//    }
     }
 
