@@ -46,14 +46,6 @@ public class ClientController {
         return ResponseEntity.ok("Registration successful!");
     }
 
-<<<<<<< HEAD
-=======
-
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 //    @PostMapping("/login")
 //    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 //        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
@@ -64,13 +56,6 @@ public class ClientController {
 //        }
 //    }
 
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 9e2bb507ae82b2814f01203dd98d169b37aae75e
->>>>>>> e4a53e71c949ea7f7f95c31b9430769d9a6be738
->>>>>>> 0dd4ba557073d11422d0f496182cd92c7ffff7b3
->>>>>>> 2d6029e8b1b97a4d6c4225aa1f8ab6ebe23baff9
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Client client = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
@@ -83,17 +68,6 @@ public class ClientController {
         }
     }
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-    // Retrieve all clients
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 2c410c431e888ce6086c1e21e199fdb979c01d3d
->>>>>>> e4a53e71c949ea7f7f95c31b9430769d9a6be738
     @PostMapping("/client/login/{email}")
     public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
         try {
@@ -129,11 +103,6 @@ public class ClientController {
     }
 
 
->>>>>>> 9e2bb507ae82b2814f01203dd98d169b37aae75e
-
->>>>>>> 2d6029e8b1b97a4d6c4225aa1f8ab6ebe23baff9
-
->>>>>>> 0dd4ba557073d11422d0f496182cd92c7ffff7b3
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
         List<Client> clients = clientRepo.findAll();
