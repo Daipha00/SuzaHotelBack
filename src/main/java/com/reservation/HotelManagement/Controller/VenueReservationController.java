@@ -1,11 +1,13 @@
 package com.reservation.HotelManagement.Controller;
 
 import com.reservation.HotelManagement.Model.Client;
+import com.reservation.HotelManagement.Model.ReservationStatus;
 import com.reservation.HotelManagement.Model.Venue;
 import com.reservation.HotelManagement.Model.Venue_reservation;
 import com.reservation.HotelManagement.Repository.ClientRepo;
 import com.reservation.HotelManagement.Repository.VenueRepo;
 import com.reservation.HotelManagement.Repository.VenueReservationRepository;
+import com.reservation.HotelManagement.Service.EmailService;
 import com.reservation.HotelManagement.Service.VenueReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,9 @@ public class VenueReservationController {
     private VenueReservationService venueReservationService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private VenueRepo venueRepo;
     @Autowired
     private VenueReservationRepository venueReservationRepository;
@@ -34,18 +39,29 @@ public class VenueReservationController {
     // Post a new venue reservation
     @PostMapping
     @ResponseBody
-    public Venue_reservation createNewReservation(@RequestBody Venue_reservation reservation,
-                                            @RequestParam Long clientId,
-                                            @RequestParam Long venueId) {
+    public ResponseEntity<String> createNewVenueReservation(@RequestBody Venue_reservation reservation,
+                                                            @RequestParam Long clientId,
+                                                            @RequestParam Long venueId) {
         Client client = clientRepo.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
         Venue venue = venueRepo.findById(venueId)
                 .orElseThrow(() -> new RuntimeException("Venue not found"));
 
+        reservation.setConfirmation(ReservationStatus.PENDING);
+
+        // Check for existing reservations
+        List<Venue_reservation> existingReservations = venueReservationRepository.findOverlappingReservations(
+                venueId, reservation.getCheck_in(), reservation.getCheck_out());
+
+        if (!existingReservations.isEmpty()) {
+            return ResponseEntity.badRequest().body("The venue is already booked between these dates.");
+        }
+
         reservation.setClient(client); // Set the client for the reservation
         reservation.setVenue(venue); // Set the venue for the reservation
 
-        return venueReservationRepository.save(reservation);
+        venueReservationRepository.save(reservation);
+        return ResponseEntity.ok("Venue reservation created successfully.");
     }
 
 
@@ -87,4 +103,26 @@ public class VenueReservationController {
         return ResponseEntity.ok(venueReservation);
     }
 
+<<<<<<< HEAD
+=======
+
+
+    @PutMapping("/{reservationId}/confirm")
+    @ResponseBody
+    public ResponseEntity<String> confirmVenueReservation(@PathVariable Long reservationId) {
+        Venue_reservation reservation = venueReservationRepository.findById(reservationId)
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+
+        // Update the confirmation status to CONFIRMED
+        reservation.setConfirmation(ReservationStatus.CONFIRMED);
+
+        // Send confirmation email to the client
+        Client client = reservation.getClient();
+        emailService.sendConfirmationEmail(client.getEmail(), client.getUserFirstName(), reservationId);
+
+        venueReservationRepository.save(reservation);
+        return ResponseEntity.ok("Venue reservation confirmed successfully and email sent.");
+    }
+
+>>>>>>> 7446e4ee7301f5f71d0e54149ae8a637e467dcda
 }

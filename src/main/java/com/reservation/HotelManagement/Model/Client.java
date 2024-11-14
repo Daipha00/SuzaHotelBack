@@ -23,7 +23,7 @@ public class Client {
     private String email;
     private String country;
     private String city;
-//    private int zipcode;
+    private int zipcode;
     private String passport;
     private String phoneNumber;
 }

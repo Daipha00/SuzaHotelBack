@@ -35,18 +35,27 @@ public class RoomReservationController {
 
     @PostMapping
     @ResponseBody
-    public Room_reservation createNewReservation(@RequestBody Room_reservation reservation,
-                                                 @RequestParam Long clientId,
-                                                 @RequestParam Long roomId) {
+    public ResponseEntity<String> createNewRoomReservation(@RequestBody Room_reservation reservation,
+                                                           @RequestParam Long clientId,
+                                                           @RequestParam Long roomId) {
         Client client = clientRepo.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
         Room room = roomRepo.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
 
+        // Check for existing reservations
+        List<Room_reservation> existingReservations = roomReservationRepository.findOverlappingReservations(
+                roomId, reservation.getCheck_in(), reservation.getCheck_out());
+
+        if (!existingReservations.isEmpty()) {
+            return ResponseEntity.badRequest().body("The room is already booked between these dates.");
+        }
+
         reservation.setClient(client); // Set the client for the reservation
         reservation.setRoom(room); // Set the room for the reservation
 
-        return roomReservationRepository.save(reservation);
+        roomReservationRepository.save(reservation);
+        return ResponseEntity.ok("Room reservation created successfully.");
     }
 
 
