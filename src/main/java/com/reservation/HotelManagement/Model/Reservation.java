@@ -20,10 +20,9 @@ public class Reservation {
     private int numberOfGuests;
     private String special_request;
 private  String status;
-private String confirmation;
 
-//    @Enumerated(EnumType.STRING)
-//    private ReservationStatus status;
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus confirmation;
 
     @ManyToOne(fetch = FetchType.EAGER) // Keep this to establish the relationship
     @JoinColumn(name = "client_id")

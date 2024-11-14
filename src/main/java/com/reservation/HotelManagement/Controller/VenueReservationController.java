@@ -1,11 +1,13 @@
 package com.reservation.HotelManagement.Controller;
 
 import com.reservation.HotelManagement.Model.Client;
+import com.reservation.HotelManagement.Model.ReservationStatus;
 import com.reservation.HotelManagement.Model.Venue;
 import com.reservation.HotelManagement.Model.Venue_reservation;
 import com.reservation.HotelManagement.Repository.ClientRepo;
 import com.reservation.HotelManagement.Repository.VenueRepo;
 import com.reservation.HotelManagement.Repository.VenueReservationRepository;
+import com.reservation.HotelManagement.Service.EmailService;
 import com.reservation.HotelManagement.Service.VenueReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ public class VenueReservationController {
 
     @Autowired
     private VenueReservationService venueReservationService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private VenueRepo venueRepo;
@@ -41,6 +46,8 @@ public class VenueReservationController {
                 .orElseThrow(() -> new RuntimeException("Client not found"));
         Venue venue = venueRepo.findById(venueId)
                 .orElseThrow(() -> new RuntimeException("Venue not found"));
+
+        reservation.setConfirmation(ReservationStatus.PENDING);
 
         // Check for existing reservations
         List<Venue_reservation> existingReservations = venueReservationRepository.findOverlappingReservations(
@@ -83,8 +90,7 @@ public class VenueReservationController {
         return venueReservationService.updateVenueReservation(id, updatedVenueReservation);
     }
 
-<<<<<<< HEAD
-=======
+
     @PatchMapping("{id}/status")
     public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
         Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
@@ -96,5 +102,24 @@ public class VenueReservationController {
         venueReservationRepository.save(venueReservation);
         return ResponseEntity.ok(venueReservation);
     }
->>>>>>> c6ab47945b1d4fb549515d66273cb292d0654ba7
+
+
+
+    @PutMapping("/{reservationId}/confirm")
+    @ResponseBody
+    public ResponseEntity<String> confirmVenueReservation(@PathVariable Long reservationId) {
+        Venue_reservation reservation = venueReservationRepository.findById(reservationId)
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+
+        // Update the confirmation status to CONFIRMED
+        reservation.setConfirmation(ReservationStatus.CONFIRMED);
+
+        // Send confirmation email to the client
+        Client client = reservation.getClient();
+        emailService.sendConfirmationEmail(client.getEmail(), client.getUserFirstName(), reservationId);
+
+        venueReservationRepository.save(reservation);
+        return ResponseEntity.ok("Venue reservation confirmed successfully and email sent.");
+    }
+
 }
