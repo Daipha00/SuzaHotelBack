@@ -99,6 +99,7 @@ public class VenueController {
         existingVenue.setVenuePackage(venuePackage);
         existingVenue.setCapacity(capacity);
 
+
         // If a new image is provided, update the image
         if (imageFile != null && !imageFile.isEmpty()) {
             existingVenue.setImage(imageFile.getBytes());

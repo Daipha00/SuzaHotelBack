@@ -19,7 +19,11 @@ public class Reservation {
     private LocalTime arrival_time;
     private int numberOfGuests;
     private String special_request;
-//    private String status;
+private  String status;
+private String confirmation;
+
+//    @Enumerated(EnumType.STRING)
+//    private ReservationStatus status;
 
     @ManyToOne(fetch = FetchType.EAGER) // Keep this to establish the relationship
     @JoinColumn(name = "client_id")
