@@ -88,37 +88,19 @@ public class VenueReservationController {
     }
 
 
-    @PatchMapping("{id}/status")
-    public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
-        Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
-        if (venueReservation.getStatus().equals("Pending")) {
-            venueReservation.setStatus("Checked-in");
-        } else {
-            venueReservation.setStatus("Checked-out");
-        }
-        venueReservationRepository.save(venueReservation);
-        return ResponseEntity.ok(venueReservation);
-    }
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 1f3b1b91e46c4d7b03ce43b22ee8e29d80130f0b
+//    @PatchMapping("{id}/status")
+//    public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
+//        Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
+//        if (venueReservation.getStatus().equals("Pending")) {
+//            venueReservation.setStatus("Checked-in");
+//        } else {
+//            venueReservation.setStatus("Checked-out");
+//        }
+//        venueReservationRepository.save(venueReservation);
+//        return ResponseEntity.ok(venueReservation);
+//    }
 
 
 
-<<<<<<< HEAD
+
 }
-=======
-        // Update the confirmation status to CONFIRMED
-        reservation.setConfirmation(ReservationStatus.CONFIRMED);
-
-        // Send confirmation email to the client
-        Client client = reservation.getClient();
-        emailService.sendConfirmationEmail(client.getEmail(), client.getUserFirstName(), reservationId);
-
-        venueReservationRepository.save(reservation);
-        return ResponseEntity.ok("Venue reservation confirmed successfully and email sent.");
-    }
-}
->>>>>>> 1f3b1b91e46c4d7b03ce43b22ee8e29d80130f0b
