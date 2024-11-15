@@ -47,6 +47,10 @@ public class ClientController {
     }
 
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 8469769489b95f48414b55929a3272ae5a47a941
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Client client = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
@@ -93,7 +97,10 @@ public class ClientController {
         }
     }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 8469769489b95f48414b55929a3272ae5a47a941
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
         List<Client> clients = clientRepo.findAll();
