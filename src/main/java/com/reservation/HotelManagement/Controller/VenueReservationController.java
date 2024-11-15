@@ -44,7 +44,6 @@ public class VenueReservationController {
         Venue venue = venueRepo.findById(venueId)
                 .orElseThrow(() -> new RuntimeException("Venue not found"));
 
-        reservation.setConfirmation(ReservationStatus.PENDING);
 
         // Check for existing reservations
         List<Venue_reservation> existingReservations = venueReservationRepository.findOverlappingReservations(
@@ -101,31 +100,7 @@ public class VenueReservationController {
         return ResponseEntity.ok(venueReservation);
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8469769489b95f48414b55929a3272ae5a47a941
 
 
-    @PutMapping("/{reservationId}/confirm")
-    @ResponseBody
-    public ResponseEntity<String> confirmVenueReservation(@PathVariable Long reservationId) {
-        Venue_reservation reservation = venueReservationRepository.findById(reservationId)
-                .orElseThrow(() -> new RuntimeException("Reservation not found"));
 
-        // Update the confirmation status to CONFIRMED
-        reservation.setConfirmation(ReservationStatus.CONFIRMED);
-
-        // Send confirmation email to the client
-        Client client = reservation.getClient();
-        emailService.sendConfirmationEmail(client.getEmail(), client.getUserFirstName(), reservationId);
-
-        venueReservationRepository.save(reservation);
-        return ResponseEntity.ok("Venue reservation confirmed successfully and email sent.");
-    }
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 8469769489b95f48414b55929a3272ae5a47a941
 }
