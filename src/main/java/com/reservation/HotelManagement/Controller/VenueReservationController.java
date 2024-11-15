@@ -33,13 +33,12 @@ public class VenueReservationController {
     @Autowired
     private ClientRepo clientRepo;
 
-
-
+    // Post a new venue reservation
     @PostMapping
     @ResponseBody
-    public ResponseEntity<?> createNewVenueReservation(@RequestBody Venue_reservation reservation,
-                                                       @RequestParam Long clientId,
-                                                       @RequestParam Long venueId) {
+    public ResponseEntity<String> createNewVenueReservation(@RequestBody Venue_reservation reservation,
+                                                            @RequestParam Long clientId,
+                                                            @RequestParam Long venueId) {
         Client client = clientRepo.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
         Venue venue = venueRepo.findById(venueId)
@@ -52,16 +51,16 @@ public class VenueReservationController {
                 venueId, reservation.getCheck_in(), reservation.getCheck_out());
 
         if (!existingReservations.isEmpty()) {
-            // Return a JSON response with an error message
-            return ResponseEntity.badRequest().body(new ErrorResponse("The venue is already booked between these dates."));
+            return ResponseEntity.badRequest().body("The venue is already booked between these dates.");
         }
 
         reservation.setClient(client); // Set the client for the reservation
         reservation.setVenue(venue); // Set the venue for the reservation
 
-        Venue_reservation savedReservation = venueReservationRepository.save(reservation);
-        return ResponseEntity.ok(savedReservation); // Return the saved reservation as JSON
+        venueReservationRepository.save(reservation);
+        return ResponseEntity.ok("Venue reservation created successfully.");
     }
+
 
 
     // Get all venue reservations

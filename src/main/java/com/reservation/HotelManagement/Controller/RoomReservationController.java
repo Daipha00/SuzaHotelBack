@@ -84,32 +84,6 @@ public class RoomReservationController {
         return roomReservationService.updateRoomReservation(id, updatedRoomReservation);
     }
 
-//    @PutMapping("/{id}/approve")
-//    public ResponseEntity<Room_reservation> approveReservation(@PathVariable Long id) {
-//        Room_reservation reservation = roomReservationRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Reservation not found"));
-//
-//        if (reservation.getStatus() == ReservationStatus.PENDING) {
-//            reservation.setStatus(ReservationStatus.APPROVED);
-//            roomReservationRepository.save(reservation);
-//            return ResponseEntity.ok(reservation);
-//        } else {
-//            return ResponseEntity.badRequest().body(reservation); // or handle differently
-//        }
-//    }
 
-//    @DeleteMapping("/{id}/cancel")
-//    public ResponseEntity<Room_reservation> cancelReservation(@PathVariable Long id) {
-//        Room_reservation reservation = roomReservationRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Reservation not found"));
-//
-//        if (reservation.getStatus() == ReservationStatus.PENDING) {
-//            reservation.setStatus(ReservationStatus.CANCELLED);
-//            roomReservationRepository.save(reservation);
-//            return ResponseEntity.ok(reservation);
-//        } else {
-//            return ResponseEntity.badRequest().body(reservation); // or handle differently
-//        }
-//    }
     }
 
