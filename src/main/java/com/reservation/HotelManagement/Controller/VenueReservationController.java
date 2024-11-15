@@ -100,7 +100,25 @@ public class VenueReservationController {
         return ResponseEntity.ok(venueReservation);
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1f3b1b91e46c4d7b03ce43b22ee8e29d80130f0b
 
 
 
+<<<<<<< HEAD
 }
+=======
+        // Update the confirmation status to CONFIRMED
+        reservation.setConfirmation(ReservationStatus.CONFIRMED);
+
+        // Send confirmation email to the client
+        Client client = reservation.getClient();
+        emailService.sendConfirmationEmail(client.getEmail(), client.getUserFirstName(), reservationId);
+
+        venueReservationRepository.save(reservation);
+        return ResponseEntity.ok("Venue reservation confirmed successfully and email sent.");
+    }
+}
+>>>>>>> 1f3b1b91e46c4d7b03ce43b22ee8e29d80130f0b
