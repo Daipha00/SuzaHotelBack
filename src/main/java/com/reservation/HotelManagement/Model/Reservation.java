@@ -19,7 +19,7 @@ public class Reservation {
     private LocalTime arrival_time;
     private int numberOfGuests;
     private String special_request;
-private  String status;
+    private  String status;
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus confirmation;
