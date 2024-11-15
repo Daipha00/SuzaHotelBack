@@ -102,10 +102,7 @@ public class VenueReservationController {
         return ResponseEntity.ok(venueReservation);
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 8469769489b95f48414b55929a3272ae5a47a941
 
 
     @PutMapping("/{reservationId}/confirm")
@@ -124,9 +121,4 @@ public class VenueReservationController {
         venueReservationRepository.save(reservation);
         return ResponseEntity.ok("Venue reservation confirmed successfully and email sent.");
     }
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 8469769489b95f48414b55929a3272ae5a47a941
 }
