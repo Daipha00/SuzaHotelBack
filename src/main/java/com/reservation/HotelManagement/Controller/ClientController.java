@@ -45,8 +45,21 @@ public class ClientController {
         clientRepo.save(client);
         return ResponseEntity.ok("Registration successful!");
     }
+<<<<<<< HEAD
+    
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+//        boolean isAuthenticated = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
+//        if (isAuthenticated) {
+//            return new ResponseEntity<>("Login successful!", HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
+//        }
+//    }
+=======
 
 
+>>>>>>> 7446e4ee7301f5f71d0e54149ae8a637e467dcda
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -94,7 +107,10 @@ public class ClientController {
         }
     }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 7446e4ee7301f5f71d0e54149ae8a637e467dcda
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
         List<Client> clients = clientRepo.findAll();

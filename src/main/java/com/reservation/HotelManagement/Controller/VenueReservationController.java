@@ -120,14 +120,16 @@ public class VenueReservationController {
     public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
         Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
         if (venueReservation.getStatus().equals("Pending")) {
-            venueReservation.setStatus("Accepted");
+            venueReservation.setStatus("Checked-in");
         } else {
-            venueReservation.setStatus("Cancel");
+            venueReservation.setStatus("Checked-out");
         }
         venueReservationRepository.save(venueReservation);
         return ResponseEntity.ok(venueReservation);
     }
 
+<<<<<<< HEAD
+=======
 
 
     @PutMapping("/{reservationId}/confirm")
@@ -147,4 +149,5 @@ public class VenueReservationController {
         return ResponseEntity.ok("Venue reservation confirmed successfully and email sent.");
     }
 
+>>>>>>> 7446e4ee7301f5f71d0e54149ae8a637e467dcda
 }
