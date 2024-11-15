@@ -1,9 +1,6 @@
 package com.reservation.HotelManagement.Controller;
 
-import com.reservation.HotelManagement.Model.Client;
-import com.reservation.HotelManagement.Model.ReservationStatus;
-import com.reservation.HotelManagement.Model.Venue;
-import com.reservation.HotelManagement.Model.Venue_reservation;
+import com.reservation.HotelManagement.Model.*;
 import com.reservation.HotelManagement.Repository.ClientRepo;
 import com.reservation.HotelManagement.Repository.VenueRepo;
 import com.reservation.HotelManagement.Repository.VenueReservationRepository;
@@ -36,12 +33,13 @@ public class VenueReservationController {
     @Autowired
     private ClientRepo clientRepo;
 
-    // Post a new venue reservation
+
+
     @PostMapping
     @ResponseBody
-    public ResponseEntity<String> createNewVenueReservation(@RequestBody Venue_reservation reservation,
-                                                            @RequestParam Long clientId,
-                                                            @RequestParam Long venueId) {
+    public ResponseEntity<?> createNewVenueReservation(@RequestBody Venue_reservation reservation,
+                                                       @RequestParam Long clientId,
+                                                       @RequestParam Long venueId) {
         Client client = clientRepo.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
         Venue venue = venueRepo.findById(venueId)
@@ -54,14 +52,15 @@ public class VenueReservationController {
                 venueId, reservation.getCheck_in(), reservation.getCheck_out());
 
         if (!existingReservations.isEmpty()) {
-            return ResponseEntity.badRequest().body("The venue is already booked between these dates.");
+            // Return a JSON response with an error message
+            return ResponseEntity.badRequest().body(new ErrorResponse("The venue is already booked between these dates."));
         }
 
         reservation.setClient(client); // Set the client for the reservation
         reservation.setVenue(venue); // Set the venue for the reservation
 
-        venueReservationRepository.save(reservation);
-        return ResponseEntity.ok("Venue reservation created successfully.");
+        Venue_reservation savedReservation = venueReservationRepository.save(reservation);
+        return ResponseEntity.ok(savedReservation); // Return the saved reservation as JSON
     }
 
 
@@ -103,6 +102,10 @@ public class VenueReservationController {
         return ResponseEntity.ok(venueReservation);
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8469769489b95f48414b55929a3272ae5a47a941
 
 
     @PutMapping("/{reservationId}/confirm")
@@ -122,4 +125,8 @@ public class VenueReservationController {
         return ResponseEntity.ok("Venue reservation confirmed successfully and email sent.");
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8469769489b95f48414b55929a3272ae5a47a941
 }
