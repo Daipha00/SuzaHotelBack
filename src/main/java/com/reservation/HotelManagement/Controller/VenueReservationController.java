@@ -33,33 +33,7 @@ public class VenueReservationController {
     @Autowired
     private ClientRepo clientRepo;
 
-    // Post a new venue reservation
-//    @PostMapping
-//    @ResponseBody
-//    public ResponseEntity<String> createNewVenueReservation(@RequestBody Venue_reservation reservation,
-//                                                            @RequestParam Long clientId,
-//                                                            @RequestParam Long venueId) {
-//        Client client = clientRepo.findById(clientId)
-//                .orElseThrow(() -> new RuntimeException("Client not found"));
-//        Venue venue = venueRepo.findById(venueId)
-//                .orElseThrow(() -> new RuntimeException("Venue not found"));
-//
-//        reservation.setConfirmation(ReservationStatus.PENDING);
-//
-//        // Check for existing reservations
-//        List<Venue_reservation> existingReservations = venueReservationRepository.findOverlappingReservations(
-//                venueId, reservation.getCheck_in(), reservation.getCheck_out());
-//
-//        if (!existingReservations.isEmpty()) {
-//            return ResponseEntity.badRequest().body("The venue is already booked between these dates.");
-//        }
-//
-//        reservation.setClient(client); // Set the client for the reservation
-//        reservation.setVenue(venue); // Set the venue for the reservation
-//
-//        venueReservationRepository.save(reservation);
-//        return ResponseEntity.ok("Venue reservation created successfully.");
-//    }
+
 
     @PostMapping
     @ResponseBody
@@ -128,8 +102,7 @@ public class VenueReservationController {
         return ResponseEntity.ok(venueReservation);
     }
 
-<<<<<<< HEAD
-=======
+
 
 
     @PutMapping("/{reservationId}/confirm")
@@ -149,5 +122,5 @@ public class VenueReservationController {
         return ResponseEntity.ok("Venue reservation confirmed successfully and email sent.");
     }
 
->>>>>>> 7446e4ee7301f5f71d0e54149ae8a637e467dcda
+
 }

@@ -14,12 +14,7 @@ public class Venue {
     private Long id;
     private String venueName;
     private String venueType;
-<<<<<<< HEAD
       private int capacity;
-=======
-
-    private int capacity;
->>>>>>> 7446e4ee7301f5f71d0e54149ae8a637e467dcda
     private String location;
     private String venuePackage;
     private String description;
