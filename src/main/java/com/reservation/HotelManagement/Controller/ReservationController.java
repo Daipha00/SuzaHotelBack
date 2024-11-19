@@ -2,6 +2,7 @@ package com.reservation.HotelManagement.Controller;
 
 import com.reservation.HotelManagement.Model.Client;
 import com.reservation.HotelManagement.Model.Reservation;
+import com.reservation.HotelManagement.Model.Venue_reservation;
 import com.reservation.HotelManagement.Repository.ClientRepo;
 import com.reservation.HotelManagement.Repository.ReservationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,21 @@ public class ReservationController {
         }
     }
 
+<<<<<<< HEAD
 
 
 }
+=======
+    @PatchMapping("{id}/status")
+    public ResponseEntity<Reservation> updateStatus(@PathVariable long id) {
+        Reservation reservation = reservationRepo.findById(id).orElseThrow();
+        if (reservation.getStatus().equals("Pending")) {
+            reservation.setStatus("Checked-in");
+        } else {
+            reservation.setStatus("Checked-out");
+        }
+        reservationRepo.save(reservation);
+        return ResponseEntity.ok(reservation);
+    }
+}
+>>>>>>> 21a1988b0b92524151cd78dcce1d651b451cb859
