@@ -15,6 +15,7 @@ public class Hotel {
     private Long id;
     private String hotelName;
     private String location;
-
+    private double price;
+    private int rating;
 
 }

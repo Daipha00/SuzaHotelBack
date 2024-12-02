@@ -7,13 +7,18 @@ import com.reservation.HotelManagement.Repository.HotelRepo;
 import com.reservation.HotelManagement.Repository.ImageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/hotel")
@@ -30,12 +35,16 @@ public class HotelController {
     public ResponseEntity<HotelResponse> createHotel(
             @RequestParam("hotelName") String hotelName,
             @RequestParam("location") String location,
+            @RequestParam("price") Double price,
+            @RequestParam("rating") Integer rating,
             @RequestParam("images") MultipartFile[] images) {
 
         // Create a new hotel entity
         Hotel hotel = new Hotel();
         hotel.setHotelName(hotelName);
         hotel.setLocation(location);
+        hotel.setPrice(price);
+        hotel.setRating(rating);
 
         // Save the hotel to the database first
         Hotel savedHotel = hotelRepository.save(hotel);
@@ -63,7 +72,7 @@ public class HotelController {
         }
 
         // Create a response object including the ID and image IDs
-        HotelResponse hotelResponse = new HotelResponse(savedHotel.getId(), savedHotel.getHotelName(), savedHotel.getLocation(), imageIds);
+        HotelResponse hotelResponse = new HotelResponse(savedHotel.getId(), savedHotel.getHotelName(), savedHotel.getLocation(), savedHotel.getPrice(), savedHotel.getRating(), imageIds);
         return new ResponseEntity<>(hotelResponse, HttpStatus.CREATED);
     }
 
@@ -83,7 +92,7 @@ public class HotelController {
                 imageIds.add(image.getId());
             }
 
-            HotelResponse hotelResponse = new HotelResponse(hotel.getId(), hotel.getHotelName(), hotel.getLocation(), imageIds);
+            HotelResponse hotelResponse = new HotelResponse(hotel.getId(), hotel.getHotelName(), hotel.getLocation(), hotel.getPrice(), hotel.getRating(), imageIds);
             hotelResponses.add(hotelResponse);
         }
 
@@ -106,16 +115,91 @@ public class HotelController {
         }
 
         // Create the response object
-        HotelResponse hotelResponse = new HotelResponse(hotel.getId(), hotel.getHotelName(), hotel.getLocation(), imageIds);
+        HotelResponse hotelResponse = new HotelResponse(hotel.getId(), hotel.getHotelName(), hotel.getLocation(), hotel.getPrice(), hotel.getRating(), imageIds);
 
         return new ResponseEntity<>(hotelResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/{hotelId}/image")
+    public ResponseEntity<byte[]> getFirstImageForHotel(@PathVariable Long hotelId) {
+        // Get the hotel by ID (optional, for validation)
+        Optional<Hotel> hotelOptional = hotelRepository.findById(hotelId);
+        if (!hotelOptional.isPresent()) {
+            return ResponseEntity.notFound().build(); // Return 404 if the hotel is not found
+        }
+
+        Hotel hotel = hotelOptional.get();
+
+        // Get the first image for the hotel
+        List<Image> images = imageRepository.findByHotelIdOrderByIdAsc(hotelId); // Assuming you have an ordering mechanism
+
+        if (images.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Return 404 if no images found for the hotel
+        }
+
+        Image firstImage = images.get(0); // Get the first image
+        return ResponseEntity.ok()
+                .contentType(getMediaType(firstImage)) // Dynamically set the content type
+                .body(firstImage.getImage()); // Return the image bytes
+    }
+    private MediaType getMediaType(Image image) {
+        // Get the file extension or check the first few bytes of the image to determine the format
+        String fileExtension = getFileExtension(image);
+
+        switch (fileExtension) {
+            case "jpg":
+            case "jpeg":
+                return MediaType.IMAGE_JPEG;
+            case "png":
+                return MediaType.IMAGE_PNG;
+            case "gif":
+                return MediaType.IMAGE_GIF;
+            default:
+                return MediaType.APPLICATION_OCTET_STREAM; // Default for unknown image types
+        }
+    }
+
+    // Helper method to get file extension (basic example)
+    private String getFileExtension(Image image) {
+        // You can implement logic here to check the file format of the image byte[] if needed
+        // For simplicity, let's assume the file type is known or inferred from the byte[]
+        return "jpg"; // Placeholder for actual logic, you can enhance this
+    }
+
+    @GetMapping("/{hotelId}/images")
+    public ResponseEntity<List<byte[]>> getAllImagesForHotel(@PathVariable Long hotelId) {
+        // Get the hotel by ID (optional, for validation)
+        Optional<Hotel> hotelOptional = hotelRepository.findById(hotelId);
+        if (!hotelOptional.isPresent()) {
+            return ResponseEntity.notFound().build(); // Return 404 if the hotel is not found
+        }
+
+        Hotel hotel = hotelOptional.get();
+
+        // Get all images for the hotel
+        List<Image> images = imageRepository.findByHotelIdOrderByIdAsc(hotelId); // Fetch images by hotel ID
+
+        if (images.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Return 404 if no images found for the hotel
+        }
+
+        // Extract image byte[] from the list
+        List<byte[]> imageBytes = images.stream()
+                .map(Image::getImage) // Assuming Image entity has a `getImage` method that returns the image byte array
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(imageBytes); // Return the list of images as response
+    }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<HotelResponse> updateHotel(
             @PathVariable Long id,
             @RequestParam("hotelName") String hotelName,
             @RequestParam("location") String location,
+            @RequestParam("price") Double price,
+            @RequestParam("rating") Integer rating,
             @RequestParam(value = "images", required = false) MultipartFile[] images) {
 
         Optional<Hotel> hotelOptional = hotelRepository.findById(id);
@@ -123,6 +207,8 @@ public class HotelController {
             Hotel hotel = hotelOptional.get();
             hotel.setHotelName(hotelName);
             hotel.setLocation(location);
+            hotel.setPrice(price);
+            hotel.setRating(rating);
 
             // Update the hotel in the database
             Hotel updatedHotel = hotelRepository.save(hotel);
@@ -152,7 +238,10 @@ public class HotelController {
             }
 
             // Create a response object including the updated hotel details
-            HotelResponse hotelResponse = new HotelResponse(updatedHotel.getId(), updatedHotel.getHotelName(), updatedHotel.getLocation(), imageIds);
+            HotelResponse hotelResponse = new HotelResponse(updatedHotel.getId(), updatedHotel.getHotelName(), updatedHotel.getLocation(),
+                    updatedHotel.getPrice(), updatedHotel.getRating(),
+
+                    imageIds);
             return new ResponseEntity<>(hotelResponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -17,4 +17,9 @@ public interface VenueReservationRepository extends JpaRepository<Venue_reservat
     List<Venue_reservation> findOverlappingReservations(@Param("venueId") Long venueId,
                                                        @Param("check_in") LocalDate check_in,
                                                        @Param("check_out") LocalDate check_out);
+
+    @Query("SELECT r FROM Venue_reservation r WHERE r.check_in = :check_in")
+    List<Venue_reservation> findByCheckIn(@Param("check_in") LocalDate check_in);
+
+
 }
