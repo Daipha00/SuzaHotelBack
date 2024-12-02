@@ -7,9 +7,11 @@ import com.reservation.HotelManagement.Repository.VenueReservationRepository;
 import com.reservation.HotelManagement.Service.EmailService;
 import com.reservation.HotelManagement.Service.VenueReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -74,6 +76,20 @@ public class VenueReservationController {
         return venueReservationService.getVenueReservationById(id);
     }
 
+    @GetMapping("/check-in")
+    public ResponseEntity<List<Venue_reservation>> getReservationsByCheckInDate(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate check_in) {
+        System.out.println("Checking reservations for date: " + check_in);
+
+        // Use the custom query method
+        List<Venue_reservation> reservations = venueReservationRepository.findByCheckIn(check_in);
+
+        System.out.println("Found reservations: " + reservations.size());
+        return ResponseEntity.ok(reservations);
+    }
+
+
+
     // Delete venue reservation by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVenueReservation(@PathVariable Long id) {
@@ -88,17 +104,6 @@ public class VenueReservationController {
     }
 
 
-//    @PatchMapping("{id}/status")
-//    public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
-//        Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
-//        if (venueReservation.getStatus().equals("Pending")) {
-//            venueReservation.setStatus("Checked-in");
-//        } else {
-//            venueReservation.setStatus("Checked-out");
-//        }
-//        venueReservationRepository.save(venueReservation);
-//        return ResponseEntity.ok(venueReservation);
-//    }
 
 
 

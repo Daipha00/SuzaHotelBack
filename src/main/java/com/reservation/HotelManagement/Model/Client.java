@@ -8,7 +8,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-@Data
+@Data   
 public class Client {
 
     @Id

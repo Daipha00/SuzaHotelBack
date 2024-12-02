@@ -15,8 +15,6 @@ public class Room{
     private int pax;
     private String description;
 
-    @Lob
-    private byte[] image;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false) // Foreign key to Hotel

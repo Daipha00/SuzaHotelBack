@@ -1,7 +1,7 @@
 package com.reservation.HotelManagement.Controller;
 
-import com.reservation.HotelManagement.Model.Room;
-import com.reservation.HotelManagement.Model.Hotel;
+import com.reservation.HotelManagement.Model.*;
+import com.reservation.HotelManagement.Repository.RoomImageRepo;
 import com.reservation.HotelManagement.Repository.RoomRepo;
 import com.reservation.HotelManagement.Repository.HotelRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,99 +24,149 @@ public class RoomController {
     private RoomRepo roomRepo;
 
     @Autowired
+    private RoomImageRepo roomImageRepo;
+    @Autowired
     private HotelRepo hotelRepo;
 
-    @PostMapping(consumes = "multipart/form-data")
-    @ResponseBody
-    public ResponseEntity<Room> createNewRoom(
+    @PostMapping
+    public ResponseEntity<RoomResponse> createRoom(
+            @RequestParam("hotelId") Long hotelId,
             @RequestParam("roomType") String roomType,
             @RequestParam("pax") int pax,
             @RequestParam("description") String description,
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("hotelId") Long hotelId) {
+            @RequestParam("images") MultipartFile[] images) {
 
-        // Fetch the Hotel entity using the hotelId from the URL parameter
+        // Validate and fetch the associated hotel
         Hotel hotel = hotelRepo.findById(hotelId)
-                .orElseThrow(() -> new RuntimeException("Hotel not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
 
-        try {
-            // Convert the image to byte array
-            byte[] imageBytes = image.getBytes();
+        // Create and save the room
+        Room room = new Room();
+        room.setRoomType(roomType);
+        room.setPax(pax);
+        room.setDescription(description);
+        room.setHotel(hotel);
+        Room savedRoom = roomRepo.save(room);
 
-            // Create a new Room entity
-            Room room = new Room();
-            room.setRoomType(roomType);
-            room.setPax(pax);
-            room.setDescription(description);
-            room.setImage(imageBytes); // Set the image as a byte array
-            room.setHotel(hotel); // Set the hotel object directly
-
-            // Save the room to the database
-            Room savedRoom = roomRepo.save(room);
-
-            return new ResponseEntity<>(savedRoom, HttpStatus.CREATED);
-        } catch (IOException e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        // Save images and associate them with the room
+        List<Long> imageIds = new ArrayList<>();
+        for (MultipartFile imageFile : images) {
+            try {
+                Room_image image = new Room_image();
+                image.setImage(imageFile.getBytes());
+                image.setRoom(savedRoom);
+                Room_image savedImage = roomImageRepo.save(image);
+                imageIds.add(savedImage.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+        RoomResponse roomResponse = new RoomResponse(savedRoom.getId(), savedRoom.getRoomType(),
+                savedRoom.getPax(), savedRoom.getDescription(), imageIds);
+        return new ResponseEntity<>(roomResponse, HttpStatus.CREATED);
     }
+
 
     @GetMapping
-    public ResponseEntity<List<Room>> getAllRooms() {
-        List<Room> rooms = roomRepo.findAll(); // Fetch all rooms
+    public ResponseEntity<List<RoomResponse>> getAllRooms() {
+        List<Room> rooms = roomRepo.findAll();
+        List<RoomResponse> roomResponses = new ArrayList<>();
 
-        // Return the list of rooms with their associated hotel information
-        return new ResponseEntity<>(rooms, HttpStatus.OK);
+        for (Room room : rooms) {
+            List<Long> imageIds = new ArrayList<>();
+            List<Room_image> images = roomImageRepo.findByRoomId(room.getId());
+            for (Room_image image : images) {
+                imageIds.add(image.getId());
+            }
+            RoomResponse roomResponse = new RoomResponse(room.getId(), room.getRoomType(),
+                    room.getPax(), room.getDescription(), imageIds);
+            roomResponses.add(roomResponse);
+        }
+
+        return new ResponseEntity<>(roomResponses, HttpStatus.OK);
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
-        Optional<Room> room = roomRepo.findById(id);
-        return room.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public ResponseEntity<RoomResponse> getRoomById(@PathVariable Long id) {
+        Room room = roomRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
+
+        // Fetch images associated with the room
+        List<Long> imageIds = new ArrayList<>();
+        List<Room_image> images = roomImageRepo.findByRoomId(room.getId());
+        for (Room_image image : images) {
+            imageIds.add(image.getId());
+        }
+
+        // Create a response object
+        RoomResponse roomResponse = new RoomResponse(room.getId(), room.getRoomType(),
+                room.getPax(), room.getDescription(), imageIds);
+
+        return new ResponseEntity<>(roomResponse, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(
+    public ResponseEntity<RoomResponse> updateRoom(
             @PathVariable Long id,
             @RequestParam("roomType") String roomType,
             @RequestParam("pax") int pax,
             @RequestParam("description") String description,
-            @RequestParam(value = "image", required = false) MultipartFile image,
-            @RequestParam("hotelId") Long hotelId) {
+            @RequestParam(value = "images", required = false) MultipartFile[] images) {
 
-        Optional<Room> optionalRoom = roomRepo.findById(id);
-        if (!optionalRoom.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        Room room = roomRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
 
-        Room room = optionalRoom.get();
+        // Update room details
         room.setRoomType(roomType);
         room.setPax(pax);
         room.setDescription(description);
+        Room updatedRoom = roomRepo.save(room);
 
-        if (image != null && !image.isEmpty()) {
-            try {
-                byte[] imageBytes = image.getBytes();
-                room.setImage(imageBytes);
-            } catch (IOException e) {
-                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        // Process and save new images, if provided
+        List<Long> imageIds = new ArrayList<>();
+        if (images != null) {
+            for (MultipartFile imageFile : images) {
+                try {
+                    Room_image image = new Room_image();
+                    image.setImage(imageFile.getBytes());
+                    image.setRoom(updatedRoom);
+                    Room_image savedImage = roomImageRepo.save(image);
+                    imageIds.add(savedImage.getId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            // Fetch existing image IDs if no new images are provided
+            List<Room_image> existingImages = roomImageRepo.findByRoomId(id);
+            for (Room_image image : existingImages) {
+                imageIds.add(image.getId());
             }
         }
 
-        Hotel hotel = hotelRepo.findById(hotelId)
-                .orElseThrow(() -> new RuntimeException("Hotel not found"));
-        room.setHotel(hotel);
+        // Create a response object
+        RoomResponse roomResponse = new RoomResponse(updatedRoom.getId(), updatedRoom.getRoomType(),
+                updatedRoom.getPax(), updatedRoom.getDescription(), imageIds);
 
-        Room updatedRoom = roomRepo.save(room);
-        return new ResponseEntity<>(updatedRoom, HttpStatus.OK);
+        return new ResponseEntity<>(roomResponse, HttpStatus.OK);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
-        if (!roomRepo.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        roomRepo.deleteById(id);
-        return ResponseEntity.noContent().build();
+        Room room = roomRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
+
+        // Delete associated images first
+        List<Room_image> images = roomImageRepo.findByRoomId(id);
+        roomImageRepo.deleteAll(images);
+
+        // Delete the room
+        roomRepo.delete(room);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

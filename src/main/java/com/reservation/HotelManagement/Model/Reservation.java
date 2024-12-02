@@ -17,6 +17,7 @@ public class Reservation {
     private LocalDate check_in;
     private LocalDate check_out;
     private LocalTime arrival_time;
+    private LocalTime depature_time;
     private int numberOfGuests;
     private String special_request;
     private  String status;
