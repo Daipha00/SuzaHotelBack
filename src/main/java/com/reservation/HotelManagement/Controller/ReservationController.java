@@ -88,6 +88,11 @@ public class ReservationController {
         }
     }
 
+<<<<<<< HEAD
+
+
+}
+=======
     @PatchMapping("{id}/status")
     public ResponseEntity<Reservation> updateStatus(@PathVariable long id) {
         Reservation reservation = reservationRepo.findById(id).orElseThrow();
@@ -100,3 +105,4 @@ public class ReservationController {
         return ResponseEntity.ok(reservation);
     }
 }
+>>>>>>> 21a1988b0b92524151cd78dcce1d651b451cb859

@@ -104,8 +104,36 @@ public class VenueReservationController {
     }
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    @PatchMapping("{id}/status")
+    public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
+        Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
+        if (venueReservation.getStatus().equals("Pending")) {
+            venueReservation.setStatus("Checked-in");
+        } else {
+            venueReservation.setStatus("Checked-out");
+        }
+        venueReservationRepository.save(venueReservation);
+        return ResponseEntity.ok(venueReservation);
+    }}
+=======
+//    @PatchMapping("{id}/status")
+//    public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
+//        Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
+//        if (venueReservation.getStatus().equals("Pending")) {
+//            venueReservation.setStatus("Checked-in");
+//        } else {
+//            venueReservation.setStatus("Checked-out");
+//        }
+//        venueReservationRepository.save(venueReservation);
+//        return ResponseEntity.ok(venueReservation);
+//    }
+>>>>>>> 2077a4d3356b73bcdbc049596e3fc190c243d0c3
 
 
 
 
 }
+>>>>>>> 21a1988b0b92524151cd78dcce1d651b451cb859
