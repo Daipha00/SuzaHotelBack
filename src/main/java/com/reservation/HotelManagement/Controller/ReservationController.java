@@ -89,8 +89,11 @@ public class ReservationController {
     }
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 6c7b5113672fe4fb315fb4fe0be02ed50466e5c4
     @PatchMapping("{id}/status")
     public ResponseEntity<Reservation> updateStatus(@PathVariable long id) {
         Reservation reservation = reservationRepo.findById(id).orElseThrow();
