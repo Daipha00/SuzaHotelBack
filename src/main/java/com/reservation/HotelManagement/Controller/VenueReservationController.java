@@ -103,17 +103,6 @@ public class VenueReservationController {
         return venueReservationService.updateVenueReservation(id, updatedVenueReservation);
     }
 
-
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> f45900ef3e17643249dfd4ec56c3ae0ca6a84416
->>>>>>> 6c7b5113672fe4fb315fb4fe0be02ed50466e5c4
     @PatchMapping("{id}/status")
     public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
         Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
@@ -125,37 +114,3 @@ public class VenueReservationController {
         venueReservationRepository.save(venueReservation);
         return ResponseEntity.ok(venueReservation);
     }}
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 6c7b5113672fe4fb315fb4fe0be02ed50466e5c4
-//    @PatchMapping("{id}/status")
-//    public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
-//        Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
-//        if (venueReservation.getStatus().equals("Pending")) {
-//            venueReservation.setStatus("Checked-in");
-//        } else {
-//            venueReservation.setStatus("Checked-out");
-//        }
-//        venueReservationRepository.save(venueReservation);
-//        return ResponseEntity.ok(venueReservation);
-//    }
-<<<<<<< HEAD
-=======
->>>>>>> 2077a4d3356b73bcdbc049596e3fc190c243d0c3
->>>>>>> f45900ef3e17643249dfd4ec56c3ae0ca6a84416
-
->>>>>>> 6c7b5113672fe4fb315fb4fe0be02ed50466e5c4
-
-
-
-
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 6c7b5113672fe4fb315fb4fe0be02ed50466e5c4

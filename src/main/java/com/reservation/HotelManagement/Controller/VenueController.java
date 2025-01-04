@@ -5,6 +5,7 @@ import com.reservation.HotelManagement.Repository.VenueImageRepo;
 import com.reservation.HotelManagement.Repository.VenueRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,6 +109,19 @@ public class VenueController {
         return new ResponseEntity<>(venueResponses, HttpStatus.OK);
     }
 
+    @GetMapping("/images/{imageId}")
+    public ResponseEntity<byte[]> getImageById(@PathVariable Long imageId) {
+        Optional<Venue_image> image = venueImageRepo.findById(imageId);
+        if (image.isPresent()) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // Adjust the content type if needed
+                    .body(image.get().getImage());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<VenueResponse> getVenueById(@PathVariable Long id) {
@@ -132,6 +146,78 @@ public class VenueController {
 
         return new ResponseEntity<>(venueResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/{venueId}/image")
+    public ResponseEntity<byte[]> getFirstImageForVenue(@PathVariable Long venueId) {
+        // Get the hotel by ID (optional, for validation)
+        Optional<Venue> venueOptional = venueRepo.findById(venueId);
+        if (!venueOptional.isPresent()) {
+            return ResponseEntity.notFound().build(); // Return 404 if the hotel is not found
+        }
+
+        Venue venue = venueOptional.get();
+
+        // Get the first image for the hotel
+        List<Venue_image> images = venueImageRepo.findByVenueIdOrderByIdAsc(venueId); // Assuming you have an ordering mechanism
+
+        if (images.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Return 404 if no images found for the hotel
+        }
+
+        Venue_image firstImage = images.get(0); // Get the first image
+        return ResponseEntity.ok()
+                .contentType(getMediaType(firstImage)) // Dynamically set the content type
+                .body(firstImage.getImage()); // Return the image bytes
+    }
+    private MediaType getMediaType(Venue_image image) {
+        // Get the file extension or check the first few bytes of the image to determine the format
+        String fileExtension = getFileExtension(image);
+
+        switch (fileExtension) {
+            case "jpg":
+            case "jpeg":
+                return MediaType.IMAGE_JPEG;
+            case "png":
+                return MediaType.IMAGE_PNG;
+            case "gif":
+                return MediaType.IMAGE_GIF;
+            default:
+                return MediaType.APPLICATION_OCTET_STREAM; // Default for unknown image types
+        }
+    }
+
+    // Helper method to get file extension (basic example)
+    private String getFileExtension(Venue_image image) {
+        // You can implement logic here to check the file format of the image byte[] if needed
+        // For simplicity, let's assume the file type is known or inferred from the byte[]
+        return "jpg"; // Placeholder for actual logic, you can enhance this
+    }
+
+    @GetMapping("/{venueId}/images")
+    public ResponseEntity<List<byte[]>> getAllImagesForVenue(@PathVariable Long venueId) {
+        // Get the hotel by ID (optional, for validation)
+        Optional<Venue> venueOptional = venueRepo.findById(venueId);
+        if (!venueOptional.isPresent()) {
+            return ResponseEntity.notFound().build(); // Return 404 if the hotel is not found
+        }
+
+        Venue venue = venueOptional.get();
+
+        // Get all images for the hotel
+        List<Venue_image> images = venueImageRepo.findByVenueIdOrderByIdAsc(venueId); // Fetch images by hotel ID
+
+        if (images.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Return 404 if no images found for the hotel
+        }
+
+        // Extract image byte[] from the list
+        List<byte[]> imageBytes = images.stream()
+                .map(Venue_image::getImage) // Assuming Image entity has a `getImage` method that returns the image byte array
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(imageBytes); // Return the list of images as response
+    }
+
 
 
     @PutMapping("/{id}")
