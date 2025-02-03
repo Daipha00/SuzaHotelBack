@@ -1,17 +1,19 @@
 package com.reservation.HotelManagement.Model;
 
 public class LoginResponse {
-       private Client client;
+       private User user;
 
-    public LoginResponse(Client client) {
-        this.client = client;
+
+
+    public LoginResponse(User user) {
+        this.user = user;
     }
 
-    public Client getClient() {
-        return client;
+    public User getUser() {
+        return user;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -33,17 +33,16 @@ public class UserService {
         adminRole.setRoleDescription("Role for admin only");
         roleRepo.save(adminRole);
 
-//        Role userRole = new Role();
-//        userRole.setRoleName("User");
-//        userRole.setRoleDescription("Role for user only");
-//        roleRepo.save(userRole);
+        Role clientRole = new Role();
+        clientRole.setRoleName("Client");
+        clientRole.setRoleDescription("Role for client only");
+        roleRepo.save(clientRole);
 
         User adminUser = new User();
         adminUser.setId(1L);
-        adminUser.setUserName("haji");
         adminUser.setUserPassword("admin123");
-        adminUser.setUserFirstName("Rahel");
-        adminUser.setUserLastName("Ombeni");
+        adminUser.setUserFirstName("John");
+        adminUser.setUserLastName("Musa");
         adminUser.setEmail("msagaladaines@gmail.com");
         adminUser.setAddress("Jumbi");
         adminUser.setPhoneNumber("0710287645");
@@ -54,8 +53,26 @@ public class UserService {
 
     }
 
+    @Transactional
+    public Client registerNewClient(Client client) {
+        Role role = roleRepo.findByRoleName("Client")
+                .orElseThrow(() -> new IllegalArgumentException("Role 'Client' not found"));
+        Set<Role> clientRoles = new HashSet<>();
+        clientRoles.add(role);
+        client.setRole(clientRoles);
 
-//    public String getEncodedPassword (String password){
-//        return passwordEncoder.encode(password);
-//    }
+        return clientRepo.save(client); // Ensure clientRepo is used
+    }
+
+    public User loginUser(String email, String password) {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
+
+        if (!user.getUserPassword().equals(password)) {
+            throw new IllegalArgumentException("Incorrect password.");
+        }
+
+        return user;
+    }
+
 }

@@ -13,6 +13,7 @@ public class Room{
     private Long id;
     private String roomType;
     private int pax;
+    private double price;
     private String description;
 
 

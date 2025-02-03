@@ -53,11 +53,11 @@ public class RoomReservationController {
 
         reservation.setClient(client); // Set the client for the reservation
         reservation.setRoom(room); // Set the room for the reservation
+        reservation.setStatus("Pending"); // Set the default status to Pending
 
         roomReservationRepository.save(reservation);
         return ResponseEntity.ok("Room reservation created successfully.");
     }
-
 
     // Get all room reservations
     @GetMapping
@@ -82,6 +82,24 @@ public class RoomReservationController {
     @PutMapping("/{id}")
     public ResponseEntity<Room_reservation> updateRoomReservation(@PathVariable Long id, @RequestBody Room_reservation updatedRoomReservation) {
         return roomReservationService.updateRoomReservation(id, updatedRoomReservation);
+    }
+
+    @PutMapping("/cancel/{reservationId}")
+    public ResponseEntity<String> cancelRoomReservation(@PathVariable Long reservationId) {
+        Room_reservation reservation = roomReservationRepository.findById(reservationId)
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+
+        if ("Confirmed".equalsIgnoreCase(reservation.getStatus())) {
+            return ResponseEntity.badRequest().body("Reservation cannot be cancelled as it has already been confirmed.");
+        }
+
+        if ("Cancelled".equalsIgnoreCase(reservation.getStatus())) {
+            return ResponseEntity.badRequest().body("Reservation is already cancelled.");
+        }
+
+        reservation.setStatus("Cancelled"); // Update the status to Cancelled
+        roomReservationRepository.save(reservation);
+        return ResponseEntity.ok("Reservation cancelled successfully.");
     }
 
 

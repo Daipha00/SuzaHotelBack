@@ -318,7 +318,7 @@ public class HotelController {
     public ResponseEntity<HotelResponse> createHotel(
             @RequestParam("hotelName") String hotelName,
             @RequestParam("location") String location,
-            @RequestParam("price") double price,
+
             @RequestParam("rating") int rating,
             @RequestParam("images") MultipartFile[] images) {
 
@@ -326,7 +326,7 @@ public class HotelController {
         Hotel hotel = new Hotel();
         hotel.setHotelName(hotelName);
         hotel.setLocation(location);
-        hotel.setPrice(price);
+
         hotel.setRating(rating);
 
         // Save the hotel to the database first
@@ -356,7 +356,7 @@ public class HotelController {
 
         // Create a response object including the ID and image IDs
         HotelResponse hotelResponse = new HotelResponse(savedHotel.getId(), savedHotel.getHotelName(),
-                savedHotel.getLocation(), savedHotel.getPrice(), savedHotel.getRating(), imageIds);
+                savedHotel.getLocation(), savedHotel.getRating(), imageIds);
 
         return new ResponseEntity<>(hotelResponse, HttpStatus.CREATED);
     }
@@ -375,7 +375,7 @@ public class HotelController {
                     hotel.getId(),
                     hotel.getHotelName(),
                     hotel.getLocation(),
-                    hotel.getPrice(),
+
                     hotel.getRating(),
                     imageIds
             );
@@ -399,7 +399,7 @@ public class HotelController {
                 hotel.getId(),
                 hotel.getHotelName(),
                 hotel.getLocation(),
-                hotel.getPrice(),
+
                 hotel.getRating(),
                 imageIds
         );
@@ -487,7 +487,7 @@ public class HotelController {
             @PathVariable Long id,
             @RequestParam("hotelName") String hotelName,
             @RequestParam("location") String location,
-            @RequestParam("price") double price,
+
             @RequestParam("rating") int rating,
             @RequestParam(value = "images", required = false) MultipartFile[] images) {
 
@@ -496,7 +496,7 @@ public class HotelController {
 
         hotel.setHotelName(hotelName);
         hotel.setLocation(location);
-        hotel.setPrice(price);
+
         hotel.setRating(rating);
 
         Hotel updatedHotel = hotelRepo.save(hotel);
@@ -528,7 +528,7 @@ public class HotelController {
                 updatedHotel.getId(),
                 updatedHotel.getHotelName(),
                 updatedHotel.getLocation(),
-                updatedHotel.getPrice(),
+
                 updatedHotel.getRating(),
                 imageIds
         );

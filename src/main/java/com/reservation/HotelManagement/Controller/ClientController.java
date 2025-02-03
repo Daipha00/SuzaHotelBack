@@ -34,51 +34,51 @@ public class ClientController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public ResponseEntity<String> registerClient(@RequestBody Client client) {
-        // Check if the email already exists
-        if (clientRepo.findByEmail(client.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Email already exists.");
-        }
+//    @PostMapping
+//    public ResponseEntity<String> registerClient(@RequestBody Client client) {
+//        // Check if the email already exists
+//        if (clientRepo.findByEmail(client.getEmail()).isPresent()) {
+//            return ResponseEntity.badRequest().body("Email already exists.");
+//        }
+//
+//        // Save the new client
+//        clientRepo.save(client);
+//        return ResponseEntity.ok("Registration successful!");
+//    }
 
-        // Save the new client
-        clientRepo.save(client);
-        return ResponseEntity.ok("Registration successful!");
-    }
 
 
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+//        Client client = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
+//        if (client != null) {
+//            // Create a response object without the password
+//            LoginResponse response = new LoginResponse(client);
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
+//        }
+//    }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Client client = clientService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        if (client != null) {
-            // Create a response object without the password
-            LoginResponse response = new LoginResponse(client);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Invalid email or password!", HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-    @PostMapping("/client/login/{email}")
-    public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
-        try {
-            Optional<Client> clientOptional = clientRepo.findByEmail(email);
-            if (clientOptional.isPresent()) {
-                Client client = clientOptional.get();
-                // Directly compare the plaintext password with the one in the database
-                if (password.equals(client.getPassword())) {
-                    return new ResponseEntity<>(client, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>("Incorrect Credentials", HttpStatus.UNAUTHORIZED);
-                }
-            } else {
-                return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception exception) {
-            return new ResponseEntity<>("No connection", HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @PostMapping("/client/login/{email}")
+//    public ResponseEntity<?> login(@PathVariable String email, @RequestParam String password) {
+//        try {
+//            Optional<Client> clientOptional = clientRepo.findByEmail(email);
+//            if (clientOptional.isPresent()) {
+//                Client client = clientOptional.get();
+//                // Directly compare the plaintext password with the one in the database
+//                if (password.equals(client.getPassword())) {
+//                    return new ResponseEntity<>(client, HttpStatus.OK);
+//                } else {
+//                    return new ResponseEntity<>("Incorrect Credentials", HttpStatus.UNAUTHORIZED);
+//                }
+//            } else {
+//                return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
+//            }
+//        } catch (Exception exception) {
+//            return new ResponseEntity<>("No connection", HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 
     @GetMapping("/email/{email}")

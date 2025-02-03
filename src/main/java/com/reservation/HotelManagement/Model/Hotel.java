@@ -8,14 +8,14 @@ import java.util.List;
 
 @Entity
 @Data
-public class Hotel {
+public class Hotel  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String hotelName;
     private String location;
-    private double price;
+
     private int rating;
 
 }

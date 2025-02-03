@@ -35,6 +35,7 @@
                 @RequestParam("hotelId") Long hotelId,
                 @RequestParam("roomType") String roomType,
                 @RequestParam("pax") int pax,
+                @RequestParam("price")  double price,
                 @RequestParam("description") String description,
                 @RequestParam("images") MultipartFile[] images) {
 
@@ -46,6 +47,7 @@
             Room room = new Room();
             room.setRoomType(roomType);
             room.setPax(pax);
+            room.setPrice(price);
             room.setDescription(description);
             room.setHotel(hotel);
             Room savedRoom = roomRepo.save(room);
@@ -65,7 +67,7 @@
             }
 
             RoomResponse roomResponse = new RoomResponse(savedRoom.getId(), savedRoom.getRoomType(),
-                    savedRoom.getPax(), savedRoom.getDescription(), imageIds);
+                    savedRoom.getPax(),savedRoom.getPrice(), savedRoom.getDescription(), imageIds);
             return new ResponseEntity<>(roomResponse, HttpStatus.CREATED);
         }
 
@@ -82,7 +84,7 @@
                     imageIds.add(image.getId());
                 }
                 RoomResponse roomResponse = new RoomResponse(room.getId(), room.getRoomType(),
-                        room.getPax(), room.getDescription(), imageIds);
+                        room.getPax(),room.getPrice(), room.getDescription(), imageIds);
                 roomResponses.add(roomResponse);
             }
 
@@ -96,17 +98,17 @@
                     .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
 
             // Fetch the rooms associated with the hotel
-            List<Room> rooms = roomRepo.findByHotelId(hotelId);  // Assuming you have this method in the repo
+            List<Room> rooms = roomRepo.findByHotelId(hotelId);  // Ensure this method is in your RoomRepository
             List<RoomResponse> roomResponses = new ArrayList<>();
 
             for (Room room : rooms) {
                 List<Long> imageIds = new ArrayList<>();
-                List<Room_image> images = roomImageRepo.findByRoomId(room.getId());
+                List<Room_image> images = roomImageRepo.findByRoomId(room.getId()); // Ensure this method is in RoomImageRepository
                 for (Room_image image : images) {
                     imageIds.add(image.getId());
                 }
                 RoomResponse roomResponse = new RoomResponse(room.getId(), room.getRoomType(),
-                        room.getPax(), room.getDescription(), imageIds);
+                        room.getPax(),room.getPrice(), room.getDescription(), imageIds);
                 roomResponses.add(roomResponse);
             }
 
@@ -128,7 +130,7 @@
 
             // Create a response object
             RoomResponse roomResponse = new RoomResponse(room.getId(), room.getRoomType(),
-                    room.getPax(), room.getDescription(), imageIds);
+                    room.getPax(),room.getPrice(), room.getDescription(), imageIds);
 
             return new ResponseEntity<>(roomResponse, HttpStatus.OK);
         }
@@ -212,6 +214,7 @@
                 @PathVariable Long id,
                 @RequestParam("roomType") String roomType,
                 @RequestParam("pax") int pax,
+                @RequestParam("price") double price,
                 @RequestParam("description") String description,
                 @RequestParam(value = "images", required = false) MultipartFile[] images) {
 
@@ -221,6 +224,7 @@
             // Update room details
             room.setRoomType(roomType);
             room.setPax(pax);
+            room.setPrice(price);
             room.setDescription(description);
             Room updatedRoom = roomRepo.save(room);
 
@@ -248,7 +252,7 @@
 
             // Create a response object
             RoomResponse roomResponse = new RoomResponse(updatedRoom.getId(), updatedRoom.getRoomType(),
-                    updatedRoom.getPax(), updatedRoom.getDescription(), imageIds);
+                    updatedRoom.getPax(),updatedRoom.getPrice(), updatedRoom.getDescription(), imageIds);
 
             return new ResponseEntity<>(roomResponse, HttpStatus.OK);
         }

@@ -8,6 +8,7 @@ import com.reservation.HotelManagement.Service.EmailService;
 import com.reservation.HotelManagement.Service.VenueReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,6 @@ public class VenueReservationController {
         Venue venue = venueRepo.findById(venueId)
                 .orElseThrow(() -> new RuntimeException("Venue not found"));
 
-
         // Check for existing reservations
         List<Venue_reservation> existingReservations = venueReservationRepository.findOverlappingReservations(
                 venueId, reservation.getCheck_in(), reservation.getCheck_out());
@@ -57,11 +57,30 @@ public class VenueReservationController {
 
         reservation.setClient(client); // Set the client for the reservation
         reservation.setVenue(venue); // Set the venue for the reservation
+        reservation.setStatus("Pending"); // Set the default status to Pending
 
         venueReservationRepository.save(reservation);
         return ResponseEntity.ok("Venue reservation created successfully.");
     }
 
+    // Get all reservations for a specific client along with the venue details
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<Venue_reservation>> getReservationsByClientId(@PathVariable Long clientId) {
+        // Retrieve the client by their ID
+        Client client = clientRepo.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+
+        // Retrieve all reservations made by the client along with the associated venue details
+        List<Venue_reservation> reservations = venueReservationRepository.findByClientIdWithVenue(clientId);
+
+        // If no reservations found, return a not found response
+        if (reservations.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // Return the list of reservations with venue details
+        return ResponseEntity.ok(reservations);
+    }
 
 
     // Get all venue reservations
@@ -89,7 +108,6 @@ public class VenueReservationController {
     }
 
 
-
     // Delete venue reservation by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVenueReservation(@PathVariable Long id) {
@@ -103,14 +121,33 @@ public class VenueReservationController {
         return venueReservationService.updateVenueReservation(id, updatedVenueReservation);
     }
 
-    @PatchMapping("{id}/status")
-    public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
-        Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
-        if (venueReservation.getStatus().equals("Pending")) {
-            venueReservation.setStatus("Checked-in");
-        } else {
-            venueReservation.setStatus("Checked-out");
+    @PutMapping("/cancel/{reservationId}")
+    public ResponseEntity<String> cancelVenueReservation(@PathVariable Long reservationId) {
+        Venue_reservation reservation = venueReservationRepository.findById(reservationId)
+                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+
+        if ("Confirmed".equalsIgnoreCase(reservation.getStatus())) {
+            return ResponseEntity.badRequest().body("Reservation cannot be cancelled as it has already been confirmed.");
         }
-        venueReservationRepository.save(venueReservation);
-        return ResponseEntity.ok(venueReservation);
-    }}
+
+        if ("Cancelled".equalsIgnoreCase(reservation.getStatus())) {
+            return ResponseEntity.badRequest().body("Reservation is already cancelled.");
+        }
+
+        reservation.setStatus("Cancelled"); // Update the status to Cancelled
+        venueReservationRepository.save(reservation);
+        return ResponseEntity.ok("Reservation cancelled successfully.");
+    }
+}
+
+//    @PatchMapping("{id}/status")
+//    public ResponseEntity<Venue_reservation> updateStatus(@PathVariable long id) {
+//        Venue_reservation venueReservation = venueReservationRepository.findById(id).orElseThrow();
+//        if (venueReservation.getStatus().equals("Pending")) {
+//            venueReservation.setStatus("Checked-in");
+//        } else {
+//            venueReservation.setStatus("Checked-out");
+//        }
+//        venueReservationRepository.save(venueReservation);
+//        return ResponseEntity.ok(venueReservation);
+//    }}

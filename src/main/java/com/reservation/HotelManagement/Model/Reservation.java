@@ -21,7 +21,7 @@ public class Reservation {
     private int numberOfGuests;
     private String special_request;
     private  String status;
-    private String confirmation;
+//    private String confirmation;
 
     @ManyToOne(fetch = FetchType.EAGER) // Keep this to establish the relationship
     @JoinColumn(name = "client_id")

@@ -21,5 +21,9 @@ public interface VenueReservationRepository extends JpaRepository<Venue_reservat
     @Query("SELECT r FROM Venue_reservation r WHERE r.check_in = :check_in")
     List<Venue_reservation> findByCheckIn(@Param("check_in") LocalDate check_in);
 
+    @Query("SELECT vr FROM Venue_reservation vr JOIN FETCH vr.venue WHERE vr.client.id = :clientId")
+    List<Venue_reservation> findByClientIdWithVenue(@Param("clientId") Long clientId);
+
+    List<Venue_reservation> findByClientId(Long clientId);
 
 }

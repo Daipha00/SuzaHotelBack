@@ -19,5 +19,7 @@ public interface RoomReservationRepository extends JpaRepository<Room_reservatio
         List<Room_reservation> findOverlappingReservations(@Param("roomId") Long roomId,
                                                            @Param("check_in") LocalDate check_in,
                                                            @Param("check_out") LocalDate check_out);
+
+    List<Room_reservation> findByClientId(Long clientId);
     }
 

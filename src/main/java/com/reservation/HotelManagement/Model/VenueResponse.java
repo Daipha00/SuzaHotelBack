@@ -34,4 +34,13 @@ public class VenueResponse {
         this.location = location;
         this.imageIds = imageIds;
     }
+
+    public VenueResponse(Long id, String venueName,String location, String venueType, int capacity) {
+        this.id = id;
+        this.venueName = venueName;
+       this.location = location;
+        this.venueType = venueType;
+        this.capacity = capacity;
+        this.location = location;
+    }
 }

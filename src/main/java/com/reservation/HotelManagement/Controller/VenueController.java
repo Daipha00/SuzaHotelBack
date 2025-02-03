@@ -31,7 +31,6 @@ public class VenueController {
     private VenueImageRepo venueImageRepo;
 
 
-
     @PostMapping
     public ResponseEntity<VenueResponse> createVenue(
             @RequestParam("venueName") String venueName,
