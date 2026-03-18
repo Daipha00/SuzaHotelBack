@@ -1,9 +1,10 @@
 package com.reservation.HotelManagement.Model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.Entity;
 import lombok.Data;
 
-import javax.persistence.*;
+
 
 @Entity
 @Data   

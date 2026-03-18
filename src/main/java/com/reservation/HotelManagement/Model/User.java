@@ -1,11 +1,12 @@
 package com.reservation.HotelManagement.Model;
 
 
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import javax.persistence.*;
+
 import java.util.Set;
 
 @Entity

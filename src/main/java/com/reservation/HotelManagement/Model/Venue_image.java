@@ -1,8 +1,7 @@
 package com.reservation.HotelManagement.Model;
 
+import jakarta.persistence.*;
 import lombok.Data;
-
-import javax.persistence.*;
 
 @Entity
 @Data

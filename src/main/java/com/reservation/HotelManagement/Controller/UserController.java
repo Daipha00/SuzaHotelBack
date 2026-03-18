@@ -6,11 +6,11 @@ import com.reservation.HotelManagement.Model.User;
 import com.reservation.HotelManagement.Repository.ClientRepo;
 import com.reservation.HotelManagement.Repository.UserRepo;
 import com.reservation.HotelManagement.Service.UserService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @RestController
@@ -34,12 +34,24 @@ public class UserController {
     }
 
 
-    @PostMapping({"/client"})
-    public User registerNewClient(@RequestBody Client client) {
-        if (clientRepo.findByEmail(client.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists.");
+    @PostMapping("/client")
+    public ResponseEntity<String> registerNewClient(@RequestBody Client client) {
+
+        // 1. Cheki email kwenye DB
+        boolean emailExistsClient = clientRepo.findByEmail(client.getEmail()).isPresent();
+        boolean emailExistsUser = userRepo.findByEmail(client.getEmail()).isPresent();
+
+        if (emailExistsClient || emailExistsUser) {
+            // 2. STOP! Hapatoshe user yoyote DB
+            return ResponseEntity
+                    .badRequest()
+                    .body("Email already exists.");
         }
-        return userService.registerNewClient(client);
+
+        // 3. Save data tu ikiwa email haipo
+        User newUser = userService.registerNewClient(client);
+
+        return ResponseEntity.ok("Registration successful!");
     }
 
     @PostMapping("/login")

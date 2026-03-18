@@ -2,9 +2,6 @@ package com.reservation.HotelManagement.Model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 
 public class ResponseMessage {
 
