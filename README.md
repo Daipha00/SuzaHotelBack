@@ -10,7 +10,7 @@ Spring Boot,
 PostgreSQL,
 
 Clone the project:
-git clone https://github.com/Daipha00/SuzaHotelBack.git
+git clone https://github.com/Daipha00/SuzaHotelBack.git, 
 cd SuzaHotelBack
 
 Configure database:
