@@ -5,13 +5,13 @@ An administrator can manage reservations by accepting, rejecting, or suggesting 
 This backend is developed using Java with the Spring Boot framework and a PostgreSQL database.
 
 Technologies:
-Java
-Spring Boot
-PostgreSQL
+Java,
+Spring Boot,
+PostgreSQL,
 
 Clone the project:
-git clone <your-repo-link>
-cd hotel-management-system
+git clone https://github.com/Daipha00/SuzaHotelBack.git
+cd SuzaHotelBack
 
 Configure database:
 Create a PostgreSQL database and update
